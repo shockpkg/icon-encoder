@@ -38,3 +38,6 @@ yarn.lock
 /lib/**/*.spec.js.map
 /lib/**/*.spec.mjs
 /lib/**/*.spec.mjs.map
+
+# Do not ignore the icons code.
+!/lib/icons

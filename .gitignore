@@ -19,3 +19,6 @@ yarn.lock
 
 # Build files
 /lib
+
+# Do not ignore the icons source.
+!/src/icons
