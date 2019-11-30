@@ -4,7 +4,7 @@
 ._*
 .Spotlight-V100
 .Trashes
-Icon?
+# Icon?
 ehthumbs.db
 Thumbs.db
 
@@ -38,6 +38,3 @@ yarn.lock
 /lib/**/*.spec.js.map
 /lib/**/*.spec.mjs
 /lib/**/*.spec.mjs.map
-
-# Do not ignore the icons code.
-!/lib/icons
