@@ -14,7 +14,7 @@ import {
 // The types ic04 and ic05 may not display individually in Finder and Preview.
 // They will display fine in a collection of icons however.
 // Reason is unclear but it often happens with icons from official tools.
-const sizesNew: [string, number, string[]][] = [
+const sizesCurrent: [string, number, string[]][] = [
 	['32x32@2x', 32 * 2, ['ic12']],
 	['128x128', 128, ['ic07']],
 	['128x128@2x', 128 * 2, ['ic13']],
@@ -27,7 +27,7 @@ const sizesNew: [string, number, string[]][] = [
 	['16x16@2x', 16 * 2, ['ic11']]
 ];
 
-const sizesOld: [string, number, string[]][] = [
+const sizesLegacy: [string, number, string[]][] = [
 	['16', 16, ['is32', 's8mk']],
 	['32', 32, ['il32', 'l8mk']],
 	['48', 48, ['ih32', 'h8mk']],
@@ -38,13 +38,13 @@ function * genTests() {
 	for (const name of specIconsPng) {
 		yield {
 			name,
-			version: 'new',
-			sizes: sizesNew
+			version: 'current',
+			sizes: sizesCurrent
 		};
 		yield {
 			name,
-			version: 'old',
-			sizes: sizesOld
+			version: 'legacy',
+			sizes: sizesLegacy
 		};
 	}
 }
