@@ -26,7 +26,7 @@ NOTE: Not all encode formats are currently supported but the major ones are.
 ### Windows ICO
 
 ```js
-import {fs} from 'fs';
+import fs from 'fs';
 import {IconIco} from '@shockpkg/icon-encoder';
 
 // Passing null automatically compresses icons for backwards compatibility.
@@ -45,7 +45,7 @@ fs.writeFileSync('icon.ico', ico.encode());
 ### macOS ICNS (current formats)
 
 ```js
-import {fs} from 'fs';
+import fs from 'fs';
 import {IconIcnc} from '@shockpkg/icon-encoder';
 
 const icns = new IconIcnc();
@@ -67,7 +67,7 @@ fs.writeFileSync('icon.icns', icns.encode());
 ### macOS ICNS (legacy formats)
 
 ```js
-import {fs} from 'fs';
+import fs from 'fs';
 import {IconIcnc} from '@shockpkg/icon-encoder';
 
 const icns = new IconIcnc();
