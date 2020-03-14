@@ -29,7 +29,7 @@ NOTE: Not all encode formats are currently supported but the major ones are.
 import {fs} from 'fs';
 import {IconIco} from '@shockpkg/icon-encoder';
 
-// Passing null automatically compresses icons for backwards copatability.
+// Passing null automatically compresses icons for backwards compatibility.
 // Pass true to force icons to be PNG encoded, or false to force BMP.
 const png = null;
 const ico = new IconIco();
