@@ -19,7 +19,7 @@ const sizes = [
 	16
 ];
 
-describe('icons/ico', () => {
+describe('icon/ico', () => {
 	describe('IconIco', () => {
 		for (const name of specIconsPng) {
 			describe(name, () => {

@@ -49,7 +49,7 @@ function * genTests() {
 	}
 }
 
-describe('icons/icns', () => {
+describe('icon/icns', () => {
 	describe('IconIcns', () => {
 		for (const {name, version, sizes} of genTests()) {
 			describe(name, () => {
