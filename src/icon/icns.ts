@@ -147,7 +147,7 @@ export class IconIcns extends Icon {
 	 * @param imageData RGBA image data.
 	 * @param type Type to encode as.
 	 */
-	protected _addFromRgbaType(imageData: IImageData, type: string) {
+	protected _addFromRgbaType(imageData: Readonly<IImageData>, type: string) {
 		if (this._typeArgb.has(type)) {
 			this.entries.push({
 				type,
@@ -183,10 +183,13 @@ export class IconIcns extends Icon {
 	 * Encode RGBA image data to ARGB.
 	 *
 	 * @param imageData RGBA image data.
-	 * @param type Icon type.
+	 * @param _type Icon type.
 	 * @returns Encoded data.
 	 */
-	protected _encodeRgbaToTypeArgb(imageData: IImageData, type: string) {
+	protected _encodeRgbaToTypeArgb(
+		imageData: Readonly<IImageData>,
+		_type: string
+	) {
 		// The compressed data always has an ARGB header.
 		return this._encodeRgbaToPackBits(
 			imageData,
@@ -199,10 +202,13 @@ export class IconIcns extends Icon {
 	 * Encode RGBA image data to PNG.
 	 *
 	 * @param imageData RGBA image data.
-	 * @param type Icon type.
+	 * @param _type Icon type.
 	 * @returns Encoded data.
 	 */
-	protected _encodeRgbaToTypePng(imageData: IImageData, type: string) {
+	protected _encodeRgbaToTypePng(
+		imageData: Readonly<IImageData>,
+		_type: string
+	) {
 		return this._encodeRgbaToPng(imageData);
 	}
 
@@ -213,7 +219,10 @@ export class IconIcns extends Icon {
 	 * @param type Icon type.
 	 * @returns Encoded data.
 	 */
-	protected _encodeRgbaToTypeIcon24Bit(imageData: IImageData, type: string) {
+	protected _encodeRgbaToTypeIcon24Bit(
+		imageData: Readonly<IImageData>,
+		type: string
+	) {
 		// The 'it32' type has 4 null byte header.
 		return this._encodeRgbaToPackBits(
 			imageData,
@@ -226,10 +235,13 @@ export class IconIcns extends Icon {
 	 * Encode RGBA image data to mask 8-bit.
 	 *
 	 * @param imageData RGBA image data.
-	 * @param type Icon type.
+	 * @param _type Icon type.
 	 * @returns Encoded data.
 	 */
-	protected _encodeRgbaToTypeMask8Bit(imageData: IImageData, type: string) {
+	protected _encodeRgbaToTypeMask8Bit(
+		imageData: Readonly<IImageData>,
+		_type: string
+	) {
 		return this._encodeRgbaChannel(imageData, 3);
 	}
 
@@ -242,7 +254,7 @@ export class IconIcns extends Icon {
 	 * @returns Encoded data.
 	 */
 	protected _encodeRgbaToPackBits(
-		imageData: IImageData,
+		imageData: Readonly<IImageData>,
 		alpha: boolean,
 		header: Readonly<Buffer> | null = null
 	) {
@@ -275,7 +287,10 @@ export class IconIcns extends Icon {
 	 * @param index Channel index (R=0, B=1, G=2, A=3).
 	 * @returns Encoded data.
 	 */
-	protected _encodeRgbaChannel(imageData: IImageData, index: 0 | 1 | 2 | 3) {
+	protected _encodeRgbaChannel(
+		imageData: Readonly<IImageData>,
+		index: 0 | 1 | 2 | 3
+	) {
 		const {data} = imageData;
 		const size = data.length;
 		const encoded = Buffer.alloc(size / 4);
@@ -291,8 +306,8 @@ export class IconIcns extends Icon {
 	 * @param data Data to be compressed.
 	 * @returns Compressed data.
 	 */
-	protected _encodePackBitsIcns(data: Buffer) {
-		return packbitsEncode(data, {
+	protected _encodePackBitsIcns(data: Readonly<Buffer>) {
+		return packbitsEncode(data as Buffer, {
 			format: 'icns'
 		});
 	}
