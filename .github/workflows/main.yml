@@ -1,0 +1,28 @@
+name: main
+
+on: push
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        config:
+          - node-version: '10.0.0'
+            NO_LINT: 1
+          - node-version: '15.2.0'
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.config.node-version }}
+
+    - run: npm install
+    - run: npm run clean
+    - run: npm run lint
+      if: matrix.config.NO_LINT != 1
+    - run: npm run build
+    - run: npm run test
