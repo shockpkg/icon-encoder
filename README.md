@@ -9,7 +9,7 @@ Package for encoding different icon files
 [![size](https://packagephobia.now.sh/badge?p=@shockpkg/icon-encoder)](https://packagephobia.now.sh/result?p=@shockpkg/icon-encoder)
 [![downloads](https://img.shields.io/npm/dm/@shockpkg/icon-encoder.svg)](https://npmcharts.com/compare/@shockpkg/icon-encoder?minimal=true)
 
-[![travis-ci](https://travis-ci.com/shockpkg/icon-encoder.svg?branch=master)](https://travis-ci.com/shockpkg/icon-encoder)
+[![Build Status](https://github.com/shockpkg/icon-encoder/workflows/main/badge.svg?branch=master)](https://github.com/shockpkg/icon-encoder/actions?query=workflow%3Amain+branch%3Amaster)
 
 
 # Overview
