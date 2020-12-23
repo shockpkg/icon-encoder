@@ -49,6 +49,8 @@ import fs from 'fs';
 import {IconIcnc} from '@shockpkg/icon-encoder';
 
 const icns = new IconIcnc();
+icns.toc = true; // Optionally include the TOC (table of contents) header.
+
 // This order matches that of iconutil with the same image set in macOS 10.14.
 // Images with @2x are just 2x the size their file name suggests.
 icns.addFromPng(fs.readFileSync('icon/32x32@2x.png'), ['ic12']);
