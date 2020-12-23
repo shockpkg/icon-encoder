@@ -61,6 +61,11 @@ export interface IIconIcnsEntry {
  */
 export class IconIcns extends Icon {
 	/**
+	 * Option to include TOC tag (table of contents) in encode.
+	 */
+	public toc = false;
+
+	/**
 	 * List of icon entries.
 	 */
 	public entries: IIconIcnsEntry[] = [];
@@ -144,21 +149,34 @@ export class IconIcns extends Icon {
 	 * @returns Encoded icon.
 	 */
 	public encode() {
+		const {toc} = this;
 		const head = Buffer.alloc(8);
 		head.write('icns', 0);
 		let size = 8;
-		const pieces: Readonly<Buffer>[] = [head];
+		let tocSize = 8;
+		const tocHead = toc ? Buffer.from('TOC ----') : null;
+		const tocs = tocHead ? [tocHead] : [];
+		const images = [];
 		for (const {type, data} of this.entries) {
 			const tagType = Buffer.alloc(4);
 			tagType.write(type, 0);
 			const tagSize = Buffer.alloc(4);
 			const tagSizeValue = data.length + 8;
 			tagSize.writeUInt32BE(tagSizeValue, 0);
-			pieces.push(tagType, tagSize, data);
+			if (toc) {
+				tocs.push(tagType, tagSize);
+				tocSize += 8;
+				size += 8;
+			}
+			images.push(tagType, tagSize, data);
 			size += tagSizeValue;
 		}
+		if (tocHead) {
+			tocHead.writeUInt32BE(tocSize, 4);
+			size += 8;
+		}
 		head.writeUInt32BE(size, 4);
-		return Buffer.concat(pieces as Buffer[], size);
+		return Buffer.concat([head, ...tocs, ...images as Buffer[]], size);
 	}
 
 	/**

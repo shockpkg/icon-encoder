@@ -53,23 +53,27 @@ describe('icon/icns', () => {
 	describe('IconIcns', () => {
 		for (const {name, version, sizes} of genTests()) {
 			describe(name, () => {
-				it(`${version}-all`, async () => {
-					const dest = encodeFile(
-						'icns',
-						name,
-						`${version}-all.icns`
-					);
-					const icns = new IconIcns();
-					for (const [, size, types] of sizes) {
-						// eslint-disable-next-line no-await-in-loop
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
+				for (const toc of [false, true]) {
+					const suffix = toc ? '-toc' : '';
+					it(`${version}-all${suffix}`, async () => {
+						const dest = encodeFile(
+							'icns',
+							name,
+							`${version}-all${suffix}.icns`
 						);
-						icns.addFromPng(png, types);
-					}
-					const data = icns.encode();
-					await fse.outputFile(dest, data);
-				});
+						const icns = new IconIcns();
+						icns.toc = toc;
+						for (const [, size, types] of sizes) {
+							// eslint-disable-next-line no-await-in-loop
+							const png = await fse.readFile(
+								specIconFilePng(name, size)
+							);
+							icns.addFromPng(png, types);
+						}
+						const data = icns.encode();
+						await fse.outputFile(dest, data);
+					});
+				}
 
 				for (const raw of [false, true]) {
 					for (const [sizeName, size, types] of sizes) {
