@@ -127,9 +127,16 @@ gulp.task('clean:lib', async () => {
 	]);
 });
 
+gulp.task('clean:encodes', async () => {
+	await del([
+		'spec/encodes'
+	]);
+});
+
 gulp.task('clean', gulp.parallel([
 	'clean:logs',
-	'clean:lib'
+	'clean:lib',
+	'clean:encodes'
 ]));
 
 // lint (watch)
