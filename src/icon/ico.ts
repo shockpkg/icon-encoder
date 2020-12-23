@@ -1,5 +1,6 @@
 import {IImageData} from '../types';
 import {Icon} from '../icon';
+import {pngIHDR} from '../util';
 
 /**
  * Icon entry.
@@ -40,8 +41,27 @@ export class IconIco extends Icon {
 	 *
 	 * @param data PNG data.
 	 * @param png Encode entry as PNG.
+	 * @param raw Use raw PNG data without re-encoding, if using PNG format.
 	 */
-	public addFromPng(data: Readonly<Buffer>, png: boolean | null = null) {
+	public addFromPng(
+		data: Readonly<Buffer>,
+		png: boolean | null = null,
+		raw = false
+	) {
+		if (raw && png !== false) {
+			const ihdr = pngIHDR(data);
+			const isPng = png || (
+				!this._sizeRequiresLegacyBitmap(ihdr.width, ihdr.height)
+			);
+			if (isPng) {
+				this.entries.push({
+					width: ihdr.width,
+					height: ihdr.height,
+					data: Buffer.concat([data as Buffer], data.length)
+				});
+				return;
+			}
+		}
 		this.addFromRgba(this._decodePngToRgba(data), png);
 	}
 
@@ -56,7 +76,10 @@ export class IconIco extends Icon {
 		png: boolean | null = null
 	) {
 		// Use PNG if forced or automatic and size large enough.
-		const isPng = png || (png === null && imageData.height >= 64);
+		const isPng = png || (
+			png === null &&
+			!this._sizeRequiresLegacyBitmap(imageData.width, imageData.height)
+		);
 
 		this.entries.push({
 			width: imageData.width,
@@ -210,5 +233,16 @@ export class IconIco extends Icon {
 			}
 		}
 		return encoded;
+	}
+
+	/**
+	 * Check if height requires legacy bitmap for compatiblity.
+	 *
+	 * @param width Image width.
+	 * @param height Image height.
+	 * @returns Returns true if requires legacy bitmap.
+	 */
+	protected _sizeRequiresLegacyBitmap(width: number, height: number) {
+		return width < 64 || height < 64;
 	}
 }

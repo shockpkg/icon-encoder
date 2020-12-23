@@ -103,6 +103,23 @@ describe('icon/ico', () => {
 						await fse.outputFile(dest, data);
 					});
 				}
+
+				for (const size of sizes) {
+					it(`${size}-png-raw`, async () => {
+						const dest = encodeFile(
+							'ico',
+							name,
+							`${size}-png-raw.ico`
+						);
+						const ico = new IconIco();
+						const png = await fse.readFile(
+							specIconFilePng(name, size)
+						);
+						ico.addFromPng(png, true, true);
+						const data = ico.encode();
+						await fse.outputFile(dest, data);
+					});
+				}
 			});
 		}
 	});
