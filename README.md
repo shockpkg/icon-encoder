@@ -29,16 +29,21 @@ NOTE: Not all encode formats are currently supported but the major ones are.
 import fs from 'fs';
 import {IconIco} from '@shockpkg/icon-encoder';
 
-// Passing null automatically compresses icons for backwards compatibility.
+// Default null automatically compresses icons for backwards compatibility.
 // Pass true to force icons to be PNG encoded, or false to force BMP.
 const png = null;
+
+// Default is to decode and re-encode the PNG data.
+// Pass true to use the raw PNG input data when using PNG data in the icon.
+const raw = false;
+
 const ico = new IconIco();
-ico.addFromPng(fs.readFileSync('icon/256x256.png'), png);
-ico.addFromPng(fs.readFileSync('icon/128x128.png'), png);
-ico.addFromPng(fs.readFileSync('icon/64x64.png'), png);
-ico.addFromPng(fs.readFileSync('icon/48x48.png'), png);
-ico.addFromPng(fs.readFileSync('icon/32x32.png'), png);
-ico.addFromPng(fs.readFileSync('icon/16x16.png'), png);
+ico.addFromPng(fs.readFileSync('icon/256x256.png'), png, raw);
+ico.addFromPng(fs.readFileSync('icon/128x128.png'), png, raw);
+ico.addFromPng(fs.readFileSync('icon/64x64.png'), png, raw);
+ico.addFromPng(fs.readFileSync('icon/48x48.png'), png, raw);
+ico.addFromPng(fs.readFileSync('icon/32x32.png'), png, raw);
+ico.addFromPng(fs.readFileSync('icon/16x16.png'), png, raw);
 fs.writeFileSync('icon.ico', ico.encode());
 ```
 
@@ -49,20 +54,27 @@ import fs from 'fs';
 import {IconIcnc} from '@shockpkg/icon-encoder';
 
 const icns = new IconIcnc();
-icns.toc = true; // Optionally include the TOC (table of contents) header.
+
+// Optionally include the TOC (table of contents) header.
+// Newer icons will often include this, the default is false.
+icns.toc = true;
+
+// Default is to decode and re-encode the PNG data.
+// Pass true to use the raw PNG input data when using PNG data in the icon.
+const raw = false;
 
 // This order matches that of iconutil with the same image set in macOS 10.14.
 // Images with @2x are just 2x the size their file name suggests.
-icns.addFromPng(fs.readFileSync('icon/32x32@2x.png'), ['ic12']);
-icns.addFromPng(fs.readFileSync('icon/128x128.png'), ['ic07']);
-icns.addFromPng(fs.readFileSync('icon/128x128@2x.png'), ['ic13']);
-icns.addFromPng(fs.readFileSync('icon/256x256.png'), ['ic08']);
-icns.addFromPng(fs.readFileSync('icon/16x16.png'), ['ic04']);
-icns.addFromPng(fs.readFileSync('icon/256x256@2x.png'), ['ic14']);
-icns.addFromPng(fs.readFileSync('icon/512x512.png'), ['ic09']);
-icns.addFromPng(fs.readFileSync('icon/32x32.png'), ['ic05']);
-icns.addFromPng(fs.readFileSync('icon/512x512@2x.png'), ['ic10']);
-icns.addFromPng(fs.readFileSync('icon/16x16@2x.png'), ['ic11']);
+icns.addFromPng(fs.readFileSync('icon/32x32@2x.png'), ['ic12'], raw);
+icns.addFromPng(fs.readFileSync('icon/128x128.png'), ['ic07'], raw);
+icns.addFromPng(fs.readFileSync('icon/128x128@2x.png'), ['ic13'], raw);
+icns.addFromPng(fs.readFileSync('icon/256x256.png'), ['ic08'], raw);
+icns.addFromPng(fs.readFileSync('icon/16x16.png'), ['ic04'], raw);
+icns.addFromPng(fs.readFileSync('icon/256x256@2x.png'), ['ic14'], raw);
+icns.addFromPng(fs.readFileSync('icon/512x512.png'), ['ic09'], raw);
+icns.addFromPng(fs.readFileSync('icon/32x32.png'), ['ic05'], raw);
+icns.addFromPng(fs.readFileSync('icon/512x512@2x.png'), ['ic10'], raw);
+icns.addFromPng(fs.readFileSync('icon/16x16@2x.png'), ['ic11'], raw);
 fs.writeFileSync('icon.icns', icns.encode());
 ```
 
