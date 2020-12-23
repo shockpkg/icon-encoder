@@ -9,7 +9,7 @@ jobs:
         config:
           - node-version: '10.0.0'
             NO_LINT: 1
-          - node-version: '15.2.0'
+          - node-version: '15.5.0'
 
     runs-on: ubuntu-20.04
 
