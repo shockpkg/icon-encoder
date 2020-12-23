@@ -114,7 +114,7 @@ export class IconIcns extends Icon {
 			if (this._typePng.has(type)) {
 				this.entries.push({
 					type,
-					data: data.slice()
+					data: Buffer.concat([data as Buffer], data.length)
 				});
 				continue;
 			}
