@@ -18,3 +18,44 @@ export interface IImageData {
 	 */
 	data: Uint8Array;
 }
+
+/**
+ * PNG IHDR.
+ */
+export interface IPngIHDR {
+
+	/**
+	 * Image width.
+	 */
+	width: number;
+
+	/**
+	 * Image height.
+	 */
+	height: number;
+
+	/**
+	 * Bit depth.
+	 */
+	bitDepth: number;
+
+	/**
+	 * Color type.
+	 */
+	colorType: number;
+
+	/**
+	 * Compression method.
+	 */
+	compressionMethod: number;
+
+	/**
+	 * Filter method.
+	 */
+	filterMethod: number;
+
+	/**
+	 * Interlace method.
+	 */
+	interlacemethod: number;
+}

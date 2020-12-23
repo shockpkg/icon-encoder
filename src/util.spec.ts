@@ -2,6 +2,10 @@ import {
 	join as pathJoin
 } from 'path';
 
+import fse from 'fs-extra';
+
+import {pngIHDR} from './util';
+
 export const specFixturesPath = pathJoin('spec', 'fixtures');
 export const specEncodesPath = pathJoin('spec', 'encodes');
 export const specIconsPng = [
@@ -24,3 +28,40 @@ export function encodeFile(...path: string[]) {
 export function specIconFilePng(name: string, size: number) {
 	return fixtureFile(name, `${size}x${size}.png`);
 }
+
+export function * genPngFiles() {
+	const sizes = [
+		1024,
+		512,
+		256,
+		128,
+		64,
+		48,
+		32,
+		16
+	];
+
+	for (const name of specIconsPng) {
+		for (const size of sizes) {
+			yield {
+				name,
+				size
+			};
+		}
+	}
+}
+
+describe('util', () => {
+	describe('pngIHDR', () => {
+		for (const {name, size} of genPngFiles()) {
+			it(`${name}: ${size}`, async () => {
+				const info = pngIHDR(
+					await fse.readFile(specIconFilePng(name, size))
+				);
+
+				expect(info.width).toBe(size);
+				expect(info.height).toBe(size);
+			});
+		}
+	});
+});
