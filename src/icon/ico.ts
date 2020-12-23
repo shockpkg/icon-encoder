@@ -1,6 +1,6 @@
 import {IImageData} from '../types';
 import {Icon} from '../icon';
-import {pngIHDR} from '../util';
+import {pngIhdr} from '../util';
 
 /**
  * Icon entry.
@@ -49,7 +49,7 @@ export class IconIco extends Icon {
 		raw = false
 	) {
 		if (raw && png !== false) {
-			const ihdr = pngIHDR(data);
+			const ihdr = pngIhdr(data);
 			const isPng = png || (
 				!this._sizeRequiresLegacyBitmap(ihdr.width, ihdr.height)
 			);

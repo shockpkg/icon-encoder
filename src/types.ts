@@ -22,7 +22,7 @@ export interface IImageData {
 /**
  * PNG IHDR.
  */
-export interface IPngIHDR {
+export interface IPngIhdr {
 
 	/**
 	 * Image width.

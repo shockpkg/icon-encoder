@@ -4,7 +4,7 @@ import {
 
 import fse from 'fs-extra';
 
-import {pngIHDR} from './util';
+import {pngIhdr} from './util';
 
 export const specFixturesPath = pathJoin('spec', 'fixtures');
 export const specEncodesPath = pathJoin('spec', 'encodes');
@@ -52,10 +52,10 @@ export function * genPngFiles() {
 }
 
 describe('util', () => {
-	describe('pngIHDR', () => {
+	describe('pngIhdr', () => {
 		for (const {name, size} of genPngFiles()) {
 			it(`${name}: ${size}`, async () => {
-				const info = pngIHDR(
+				const info = pngIhdr(
 					await fse.readFile(specIconFilePng(name, size))
 				);
 

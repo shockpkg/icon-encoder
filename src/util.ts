@@ -1,4 +1,4 @@
-import {IPngIHDR} from './types';
+import {IPngIhdr} from './types';
 
 /**
  * Read PNG IHDR data.
@@ -6,7 +6,7 @@ import {IPngIHDR} from './types';
  * @param data PNG data.
  * @returns PNG IHDR.
  */
-export function pngIHDR(data: Readonly<Buffer>): IPngIHDR {
+export function pngIhdr(data: Readonly<Buffer>): IPngIhdr {
 	if (data.toString('ascii', 0, 8) !== '\tPNG\r\n\x1a\n') {
 		throw new Error('Invalid PNG header signature');
 	}
