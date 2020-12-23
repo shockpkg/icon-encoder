@@ -71,21 +71,24 @@ describe('icon/icns', () => {
 					await fse.outputFile(dest, data);
 				});
 
-				for (const [sizeName, size, types] of sizes) {
-					it(`${version}-${sizeName}`, async () => {
-						const dest = encodeFile(
-							'icns',
-							name,
-							`${version}-${sizeName}.icns`
-						);
-						const icns = new IconIcns();
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
-						);
-						icns.addFromPng(png, types);
-						const data = icns.encode();
-						await fse.outputFile(dest, data);
-					});
+				for (const raw of [false, true]) {
+					for (const [sizeName, size, types] of sizes) {
+						const suffix = raw ? 'raw' : 'enc';
+						it(`${version}-${sizeName}-${suffix}`, async () => {
+							const dest = encodeFile(
+								'icns',
+								name,
+								`${version}-${sizeName}-${suffix}.icns`
+							);
+							const icns = new IconIcns();
+							const png = await fse.readFile(
+								specIconFilePng(name, size)
+							);
+							icns.addFromPng(png, types, raw);
+							const data = icns.encode();
+							await fse.outputFile(dest, data);
+						});
+					}
 				}
 			});
 		}

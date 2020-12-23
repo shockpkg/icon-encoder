@@ -98,9 +98,29 @@ export class IconIcns extends Icon {
 	 *
 	 * @param data PNG data.
 	 * @param types Types to encode as.
+	 * @param raw Use raw PNG data without re-encoding for the PNG types.
 	 */
-	public addFromPng(data: Readonly<Buffer>, types: readonly string[]) {
-		this.addFromRgba(this._decodePngToRgba(data), types);
+	public addFromPng(
+		data: Readonly<Buffer>,
+		types: readonly string[],
+		raw = false
+	) {
+		if (!raw) {
+			this.addFromRgba(this._decodePngToRgba(data), types);
+			return;
+		}
+		let rgba: IImageData | null = null;
+		for (const type of types) {
+			if (this._typePng.has(type)) {
+				this.entries.push({
+					type,
+					data: data.slice()
+				});
+				continue;
+			}
+			rgba ||= this._decodePngToRgba(data);
+			this.addFromRgba(rgba, [type]);
+		}
 	}
 
 	/**
