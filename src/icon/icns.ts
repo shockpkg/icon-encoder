@@ -1,7 +1,6 @@
 import * as packbits from '@fiahfy/packbits';
 
 import {IImageData} from '../types';
-import {property} from '../decorators';
 import {Icon} from '../icon';
 
 // For compatability for CommonJS and ESM.
@@ -73,25 +72,21 @@ export class IconIcns extends Icon {
 	/**
 	 * Types that are ARGB.
 	 */
-	@property(false)
 	protected _typeArgb = new Set(typeArgb);
 
 	/**
 	 * Types that are PNG.
 	 */
-	@property(false)
 	protected _typePng = new Set(typePng);
 
 	/**
 	 * Types that are icon 24-bit.
 	 */
-	@property(false)
 	protected _typeIcon24Bit = new Set(typeIcon24Bit);
 
 	/**
 	 * Types that are mask 8-bit.
 	 */
-	@property(false)
 	protected _typeMask8Bit = new Set(typeMask8Bit);
 
 	constructor() {
