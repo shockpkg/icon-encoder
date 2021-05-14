@@ -16,7 +16,7 @@ import del from 'del';
 const readFile = util.promisify(fs.readFile);
 const pipeline = util.promisify(stream.pipeline);
 
-async function exec(cmd, args = []) {
+async function exec(cmd: string, args: string[] = []) {
 	await execa(cmd, args, {
 		preferLocal: true,
 		stdio: 'inherit'
@@ -24,18 +24,22 @@ async function exec(cmd, args = []) {
 }
 
 async function packageJSON() {
-	packageJSON.json = packageJSON.json || readFile('package.json', 'utf8');
-	return JSON.parse(await packageJSON.json);
+	return JSON.parse(await readFile('package.json', 'utf8'));
 }
 
 async function babelrc() {
-	babelrc.json = babelrc.json || readFile('.babelrc', 'utf8');
-	return Object.assign(JSON.parse(await babelrc.json), {
+	return {
+		...JSON.parse(await readFile('.babelrc', 'utf8')),
 		babelrc: false
-	});
+	};
 }
 
-async function babelTarget(src, srcOpts, dest, modules) {
+async function babelTarget(
+	src: string[],
+	srcOpts: any,
+	dest: string,
+	modules: string | boolean
+) {
 	// Change module.
 	const babelOptions = await babelrc();
 	for (const preset of babelOptions.presets) {
@@ -66,9 +70,9 @@ async function babelTarget(src, srcOpts, dest, modules) {
 	const filterMetaReplaces = [
 		["'@VERSION@'", JSON.stringify(pkg.version)],
 		["'@NAME@'", JSON.stringify(pkg.name)]
-	].map(v => gulpReplace(...v));
+	].map(([f, r]) => gulpReplace(f, r));
 
-	await pipeline(...[
+	await pipeline(
 		gulp.src(src, srcOpts),
 		filterMeta,
 		...filterMetaReplaces,
@@ -94,18 +98,7 @@ async function babelTarget(src, srcOpts, dest, modules) {
 			return contents;
 		}),
 		gulp.dest(dest)
-	].filter(Boolean));
-}
-
-async function eslint(strict) {
-	try {
-		await exec('eslint', ['.']);
-	}
-	catch (err) {
-		if (strict) {
-			throw err;
-		}
-	}
+	);
 }
 
 // clean
@@ -136,20 +129,10 @@ gulp.task('clean', gulp.parallel([
 	'clean:encodes'
 ]));
 
-// lint (watch)
-
-gulp.task('lintw:es', async () => {
-	await eslint(false);
-});
-
-gulp.task('lintw', gulp.parallel([
-	'lintw:es'
-]));
-
 // lint
 
 gulp.task('lint:es', async () => {
-	await eslint(true);
+	await exec('eslint', ['.']);
 });
 
 gulp.task('lint', gulp.parallel([
@@ -190,22 +173,23 @@ gulp.task('test', gulp.parallel([
 	'test:node'
 ]));
 
+// watch
+
+gulp.task('watch', () => {
+	gulp.watch([
+		'src/**/*'
+	], gulp.series([
+		'all'
+	]));
+});
+
 // all
 
 gulp.task('all', gulp.series([
 	'clean',
-	'lint',
 	'build',
-	'test'
-]));
-
-// watched
-
-gulp.task('watched', gulp.series([
-	'clean',
-	'lintw',
-	'build',
-	'test'
+	'test',
+	'lint'
 ]));
 
 // prepack
