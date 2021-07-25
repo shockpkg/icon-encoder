@@ -5,7 +5,7 @@ Package for encoding different icon files
 [![npm](https://img.shields.io/npm/v/@shockpkg/icon-encoder.svg)](https://npmjs.com/package/@shockpkg/icon-encoder)
 [![node](https://img.shields.io/node/v/@shockpkg/icon-encoder.svg)](https://nodejs.org)
 
-[![dependencies](https://img.shields.io/david/shockpkg/icon-encoder.svg)](https://david-dm.org/shockpkg/icon-encoder)
+[![dependencies](https://img.shields.io/david/shockpkg/icon-encoder)](https://david-dm.org/shockpkg/icon-encoder)
 [![size](https://packagephobia.now.sh/badge?p=@shockpkg/icon-encoder)](https://packagephobia.now.sh/result?p=@shockpkg/icon-encoder)
 [![downloads](https://img.shields.io/npm/dm/@shockpkg/icon-encoder.svg)](https://npmcharts.com/compare/@shockpkg/icon-encoder?minimal=true)
 
