@@ -9,11 +9,11 @@ jobs:
         config:
         - node-version: '10.13.0' # LTS
           NO_LINT: 1
-        - node-version: '12.22.1' # LTS
+        - node-version: '12.13.0' # LTS
           NO_LINT: 1
-        - node-version: '14.17.0' # LTS
+        - node-version: '14.15.0' # LTS
           NO_LINT: 1
-        - node-version: '16.1.0'
+        - node-version: '16.5.0'
 
     runs-on: ubuntu-20.04
 
