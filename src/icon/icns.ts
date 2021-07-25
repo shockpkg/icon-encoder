@@ -171,7 +171,7 @@ export class IconIcns extends Icon {
 			size += 8;
 		}
 		head.writeUInt32BE(size, 4);
-		return Buffer.concat([head, ...tocs, ...images as Buffer[]], size);
+		return Buffer.concat([head, ...tocs, ...images], size);
 	}
 
 	/**
