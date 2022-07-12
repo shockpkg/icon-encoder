@@ -19,7 +19,7 @@ export function pngIhdr(data: Readonly<Buffer>): IPngIhdr {
 		const name = data.toString('ascii', offset, offset + 4);
 		offset += 4;
 		if (name === 'IHDR') {
-			const d = data.slice(offset, offset + size);
+			const d = data.subarray(offset, offset + size);
 			return {
 				width: d.readUInt32BE(0),
 				height: d.readUInt32BE(4),

@@ -3,9 +3,12 @@ import UPNG from 'upng-js';
 import {IImageData} from './types';
 
 /**
- * Icon constructor.
+ * Icon object.
  */
 export abstract class Icon extends Object {
+	/**
+	 * Icon constructor.
+	 */
 	constructor() {
 		super();
 	}
@@ -32,14 +35,25 @@ export abstract class Icon extends Object {
 	 * @returns PNG data.
 	 */
 	protected _encodeRgbaToPng(imageData: Readonly<IImageData>) {
-		return Buffer.from((UPNG as any).encode(
-			[imageData.data.buffer],
-			imageData.width,
-			imageData.height,
-			0,
-			[],
-			true
-		) as ArrayBuffer);
+		return Buffer.from(
+			(
+				UPNG.encode as (
+					imgs: ArrayBuffer[],
+					w: number,
+					h: number,
+					cnum: number,
+					dels?: number[],
+					forbidPlte?: boolean
+				) => ArrayBuffer
+			)(
+				[imageData.data.buffer],
+				imageData.width,
+				imageData.height,
+				0,
+				[],
+				true
+			)
+		);
 	}
 
 	/**

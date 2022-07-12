@@ -10,13 +10,11 @@ Package for encoding different icon files
 
 [![Build Status](https://github.com/shockpkg/icon-encoder/workflows/main/badge.svg?branch=master)](https://github.com/shockpkg/icon-encoder/actions?query=workflow%3Amain+branch%3Amaster)
 
-
 # Overview
 
 Encoders for Windows ICO and macOS ICNS files with fine grain control.
 
 NOTE: Not all encode formats are currently supported but the major ones are.
-
 
 # Usage
 
@@ -91,11 +89,9 @@ icns.addFromPng(fs.readFileSync('icon/128x128.png'), ['it32', 't8mk']);
 fs.writeFileSync('icon.icns', icns.encode());
 ```
 
-
 # Bugs
 
 If you find a bug or have compatibility issues, please open a ticket under issues section for this repository.
-
 
 # License
 

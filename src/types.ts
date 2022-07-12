@@ -2,7 +2,7 @@
  * Image data.
  */
 export interface IImageData {
-
+	//
 	/**
 	 * Image width.
 	 */
@@ -23,7 +23,7 @@ export interface IImageData {
  * PNG IHDR.
  */
 export interface IPngIhdr {
-
+	//
 	/**
 	 * Image width.
 	 */

@@ -4,12 +4,10 @@ import {IImageData} from '../types';
 import {Icon} from '../icon';
 
 // For compatability for CommonJS and ESM.
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const packbitsEncode = packbits.encode || (packbits as any).default.encode;
 
-const typeArgb = [
-	'ic04',
-	'ic05'
-];
+const typeArgb = ['ic04', 'ic05'];
 
 const typePng = [
 	'icp4',
@@ -25,25 +23,15 @@ const typePng = [
 	'ic14'
 ];
 
-const typeIcon24Bit = [
-	'is32',
-	'il32',
-	'ih32',
-	'it32'
-];
+const typeIcon24Bit = ['is32', 'il32', 'ih32', 'it32'];
 
-const typeMask8Bit = [
-	's8mk',
-	'l8mk',
-	'h8mk',
-	't8mk'
-];
+const typeMask8Bit = ['s8mk', 'l8mk', 'h8mk', 't8mk'];
 
 /**
  * Icon entry.
  */
 export interface IIconIcnsEntry {
-
+	//
 	/**
 	 * Icon type.
 	 */
@@ -56,7 +44,7 @@ export interface IIconIcnsEntry {
 }
 
 /**
- * IconIcns constructor.
+ * IconIcns object.
  */
 export class IconIcns extends Icon {
 	/**
@@ -89,6 +77,9 @@ export class IconIcns extends Icon {
 	 */
 	protected _typeMask8Bit = new Set(typeMask8Bit);
 
+	/**
+	 * IconIcns constructor.
+	 */
 	constructor() {
 		super();
 	}
@@ -294,21 +285,15 @@ export class IconIcns extends Icon {
 		const pieces = header ? [header] : [];
 		if (alpha) {
 			// A:
-			pieces.push(this._encodePackBitsIcns(
-				this._encodeRgbaChannel(imageData, 3)
-			));
+			pieces.push(
+				this._encodePackBitsIcns(this._encodeRgbaChannel(imageData, 3))
+			);
 		}
 		// RGB:
 		pieces.push(
-			this._encodePackBitsIcns(
-				this._encodeRgbaChannel(imageData, 0)
-			),
-			this._encodePackBitsIcns(
-				this._encodeRgbaChannel(imageData, 1)
-			),
-			this._encodePackBitsIcns(
-				this._encodeRgbaChannel(imageData, 2)
-			)
+			this._encodePackBitsIcns(this._encodeRgbaChannel(imageData, 0)),
+			this._encodePackBitsIcns(this._encodeRgbaChannel(imageData, 1)),
+			this._encodePackBitsIcns(this._encodeRgbaChannel(imageData, 2))
 		);
 		return Buffer.concat(pieces as Buffer[]);
 	}

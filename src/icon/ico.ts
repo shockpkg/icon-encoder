@@ -6,7 +6,7 @@ import {pngIhdr} from '../util';
  * Icon entry.
  */
 export interface IIconIcoEntry {
-
+	//
 	/**
 	 * Icon width.
 	 */
@@ -24,7 +24,7 @@ export interface IIconIcoEntry {
 }
 
 /**
- * IconIco constructor.
+ * IconIco object.
  */
 export class IconIco extends Icon {
 	/**
@@ -32,6 +32,9 @@ export class IconIco extends Icon {
 	 */
 	public entries: IIconIcoEntry[] = [];
 
+	/**
+	 * IconIco constructor.
+	 */
 	constructor() {
 		super();
 	}
@@ -50,9 +53,8 @@ export class IconIco extends Icon {
 	) {
 		if (raw && png !== false) {
 			const ihdr = pngIhdr(data);
-			const isPng = png || (
-				!this._sizeRequiresLegacyBitmap(ihdr.width, ihdr.height)
-			);
+			const isPng =
+				png || !this._sizeRequiresLegacyBitmap(ihdr.width, ihdr.height);
 			if (isPng) {
 				this.entries.push({
 					width: ihdr.width,
@@ -76,17 +78,20 @@ export class IconIco extends Icon {
 		png: boolean | null = null
 	) {
 		// Use PNG if forced or automatic and size large enough.
-		const isPng = png || (
-			png === null &&
-			!this._sizeRequiresLegacyBitmap(imageData.width, imageData.height)
-		);
+		const isPng =
+			png ||
+			(png === null &&
+				!this._sizeRequiresLegacyBitmap(
+					imageData.width,
+					imageData.height
+				));
 
 		this.entries.push({
 			width: imageData.width,
 			height: imageData.height,
-			data: isPng ?
-				this._encodeRgbaToPng(imageData) :
-				this._encodeRgbaToBmp(imageData)
+			data: isPng
+				? this._encodeRgbaToPng(imageData)
+				: this._encodeRgbaToBmp(imageData)
 		});
 	}
 
@@ -101,7 +106,7 @@ export class IconIco extends Icon {
 		const dirs: Buffer[] = [];
 		const imgs: Buffer[] = [];
 		let size = dir.length;
-		let offset = size + (entries.length * 16);
+		let offset = size + entries.length * 16;
 		for (const entry of entries) {
 			const {data} = entry;
 			const dataSize = data.length;
@@ -166,9 +171,8 @@ export class IconIco extends Icon {
 
 		// Calculate the piece sizes.
 		const headerSize = 40;
-		const maskSize = (
-			width + (width % 32 ? 32 - (width % 32) : 0)
-		) * height / 8;
+		const maskSize =
+			((width + (width % 32 ? 32 - (width % 32) : 0)) * height) / 8;
 		const bodySize = dataSize + maskSize;
 
 		// Calculate the piece offsets.
@@ -205,7 +209,7 @@ export class IconIco extends Icon {
 				const g = data[pos++];
 				const b = data[pos++];
 				const a = data[pos];
-				pos = (end - row) + col;
+				pos = end - row + col;
 				encoded.writeUInt8(b, imgOffset + pos++);
 				encoded.writeUInt8(g, imgOffset + pos++);
 				encoded.writeUInt8(r, imgOffset + pos++);

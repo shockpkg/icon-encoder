@@ -1,14 +1,8 @@
 import fse from 'fs-extra';
 
-import {
-	specIconsPng,
-	specIconFilePng,
-	encodeFile
-} from '../util.spec';
+import {specIconsPng, specIconFilePng, encodeFile} from '../util.spec';
 
-import {
-	IconIcns
-} from './icns';
+import {IconIcns} from './icns';
 
 // NOTE:
 // The types ic04 and ic05 may not display individually in Finder and Preview.
@@ -34,7 +28,7 @@ const sizesLegacy: [string, number, string[]][] = [
 	['128', 128, ['it32', 't8mk']]
 ];
 
-function * genTests() {
+function* genTests() {
 	for (const name of specIconsPng) {
 		yield {
 			name,
@@ -52,6 +46,7 @@ function * genTests() {
 describe('icon/icns', () => {
 	describe('IconIcns', () => {
 		for (const {name, version, sizes} of genTests()) {
+			// eslint-disable-next-line no-loop-func
 			describe(name, () => {
 				for (const toc of [false, true]) {
 					const suffix = toc ? '-toc' : '';

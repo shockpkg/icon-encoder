@@ -1,6 +1,4 @@
-import {
-	join as pathJoin
-} from 'path';
+import {join as pathJoin} from 'path';
 
 import fse from 'fs-extra';
 
@@ -29,17 +27,8 @@ export function specIconFilePng(name: string, size: number) {
 	return fixtureFile(name, `${size}x${size}.png`);
 }
 
-export function * genPngFiles() {
-	const sizes = [
-		1024,
-		512,
-		256,
-		128,
-		64,
-		48,
-		32,
-		16
-	];
+export function* genPngFiles() {
+	const sizes = [1024, 512, 256, 128, 64, 48, 32, 16];
 
 	for (const name of specIconsPng) {
 		for (const size of sizes) {
@@ -54,6 +43,7 @@ export function * genPngFiles() {
 describe('util', () => {
 	describe('pngIhdr', () => {
 		for (const {name, size} of genPngFiles()) {
+			// eslint-disable-next-line no-loop-func
 			it(`${name}: ${size}`, async () => {
 				const info = pngIhdr(
 					await fse.readFile(specIconFilePng(name, size))
