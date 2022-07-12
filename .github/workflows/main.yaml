@@ -1,0 +1,78 @@
+name: main
+
+on: push
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        config:
+          - node-version: '10.13.0' # LTS
+            NO_FORMATTED: 1
+            NO_LINT: 1
+            NO_ESM: 1
+
+          - node-version: '12.13.0' # LTS
+            NO_FORMATTED: 1
+            NO_LINT: 1
+            NO_ESM: 1
+
+          - node-version: '14.15.0' # LTS
+            NO_FORMATTED: 1
+            NO_LINT: 1
+
+          - node-version: '16.13.0' # LTS
+            NO_FORMATTED: 1
+            NO_LINT: 1
+
+          - node-version: '16.16.0' # LTS (current)
+
+          - node-version: '18.5.0'
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.config.node-version }}
+
+      - name: Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
+      - name: Lint
+        run: npm run lint
+        if: matrix.config.NO_LINT != 1
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.16.0'
+          registry-url: https://registry.npmjs.org/
+
+      - name: Dependencies
+        run: npm ci
+
+      - name: Publish
+        run: npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
