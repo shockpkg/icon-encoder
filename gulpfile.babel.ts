@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import stream from 'stream';
+import childProcess from 'child_process';
 import util from 'util';
 
 import gulp from 'gulp';
@@ -10,17 +11,23 @@ import gulpFilter from 'gulp-filter';
 import gulpReplace from 'gulp-replace';
 import gulpSourcemaps from 'gulp-sourcemaps';
 import gulpBabel from 'gulp-babel';
-import execa from 'execa';
 import del from 'del';
 
 const readFile = util.promisify(fs.readFile);
 const pipeline = util.promisify(stream.pipeline);
 
 async function exec(cmd: string, args: string[] = []) {
-	await execa(cmd, args, {
-		preferLocal: true,
-		stdio: 'inherit'
+	const code = await new Promise<number | null>((resolve, reject) => {
+		const p = childProcess.spawn(cmd, args, {
+			stdio: 'inherit',
+			shell: true
+		});
+		p.once('close', resolve);
+		p.once('error', reject);
 	});
+	if (code) {
+		throw new Error(`Exit code: ${code}`);
+	}
 }
 
 async function packageJSON() {
