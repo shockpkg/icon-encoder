@@ -1,4 +1,4 @@
-# icon-encoder
+# Icon Encoder
 
 Package for encoding different icon files
 

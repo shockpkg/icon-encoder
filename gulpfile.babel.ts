@@ -117,7 +117,12 @@ async function babelTarget(
 // clean
 
 gulp.task('clean:logs', async () => {
-	await del(['npm-debug.log*', 'yarn-debug.log*', 'yarn-error.log*']);
+	await del([
+		'npm-debug.log*',
+		'yarn-debug.log*',
+		'yarn-error.log*',
+		'report.*.json'
+	]);
 });
 
 gulp.task('clean:lib', async () => {
