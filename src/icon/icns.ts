@@ -1,11 +1,7 @@
-import * as packbits from '@fiahfy/packbits';
+import {encode as packbitsEncode} from '@fiahfy/packbits';
 
 import {IImageData} from '../types';
 import {Icon} from '../icon';
-
-// For compatability for CommonJS and ESM.
-// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-const packbitsEncode = packbits.encode || (packbits as any).default.encode;
 
 const typeArgb = ['ic04', 'ic05'];
 
