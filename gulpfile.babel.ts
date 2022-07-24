@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import stream from 'stream';
-import childProcess from 'child_process';
-import util from 'util';
+import {readFile, rm} from 'fs/promises';
+import {basename} from 'path';
+import {pipeline} from 'stream';
+import {spawn} from 'child_process';
+import {promisify} from 'util';
 
 import gulp from 'gulp';
 import gulpRename from 'gulp-rename';
@@ -11,14 +11,12 @@ import gulpFilter from 'gulp-filter';
 import gulpReplace from 'gulp-replace';
 import gulpSourcemaps from 'gulp-sourcemaps';
 import gulpBabel from 'gulp-babel';
-import del from 'del';
 
-const readFile = util.promisify(fs.readFile);
-const pipeline = util.promisify(stream.pipeline);
+const pipe = promisify(pipeline);
 
 async function exec(cmd: string, args: string[] = []) {
 	const code = await new Promise<number | null>((resolve, reject) => {
-		const p = childProcess.spawn(cmd, args, {
+		const p = spawn(cmd, args, {
 			stdio: 'inherit',
 			shell: true
 		});
@@ -52,28 +50,30 @@ async function babelTarget(
 	dest: string,
 	modules: string | boolean
 ) {
-	// Change module.
+	const ext = modules ? '.js' : '.mjs';
+
 	const babelOptions = await babelrc();
 	for (const preset of babelOptions.presets) {
 		if (preset[0] === '@babel/preset-env') {
 			(preset[1] as {modules: string | boolean}).modules = modules;
 		}
 	}
-	if (!modules) {
+	if (modules === 'commonjs') {
 		babelOptions.plugins.push([
-			'esm-resolver',
-			{
-				source: {
-					extensions: [
-						[
-							['.js', '.mjs', '.jsx', '.mjsx', '.ts', '.tsx'],
-							'.mjs'
-						]
-					]
-				}
-			}
+			'@babel/plugin-transform-modules-commonjs',
+			{importInterop: 'node'}
 		]);
 	}
+	babelOptions.plugins.push([
+		'esm-resolver',
+		{
+			source: {
+				extensions: [
+					[['.js', '.mjs', '.jsx', '.mjsx', '.ts', '.tsx'], ext]
+				]
+			}
+		}
+	]);
 
 	// Read the package JSON.
 	const pkg = await packageJson();
@@ -85,7 +85,7 @@ async function babelTarget(
 		["'@NAME@'", JSON.stringify(pkg.name)]
 	].map(([f, r]) => gulpReplace(f, r));
 
-	await pipeline(
+	await pipe(
 		gulp.src(src),
 		filterMeta,
 		...filterMetaReplaces,
@@ -93,22 +93,18 @@ async function babelTarget(
 		gulpSourcemaps.init(),
 		gulpBabel(babelOptions as {}),
 		gulpRename(path => {
-			if (!modules && path.extname === '.js') {
-				path.extname = '.mjs';
-			}
+			path.extname = ext;
 		}),
 		gulpSourcemaps.write('.', {
 			includeContent: true,
 			addComment: false,
 			destPath: dest
 		}),
-		gulpInsert.transform((contents, file) => {
-			// Manually append sourcemap comment.
-			if (/\.m?js$/i.test(file.path)) {
-				const base = path.basename(file.path);
-				return `${contents}\n//# sourceMappingURL=${base}.map\n`;
+		gulpInsert.transform((code, {path}) => {
+			if (path.endsWith(ext)) {
+				return `${code}\n//# sourceMappingURL=${basename(path)}.map\n`;
 			}
-			return contents;
+			return code;
 		}),
 		gulp.dest(dest)
 	);
@@ -116,32 +112,18 @@ async function babelTarget(
 
 // clean
 
-gulp.task('clean:logs', async () => {
-	await del([
-		'npm-debug.log*',
-		'yarn-debug.log*',
-		'yarn-error.log*',
-		'report.*.json'
+gulp.task('clean', async () => {
+	await Promise.all([
+		rm('lib', {recursive: true, force: true}),
+		rm('spec/encodes', {recursive: true, force: true})
 	]);
 });
 
-gulp.task('clean:lib', async () => {
-	await del(['lib']);
-});
-
-gulp.task('clean:encodes', async () => {
-	await del(['spec/encodes']);
-});
-
-gulp.task('clean', gulp.parallel(['clean:logs', 'clean:lib', 'clean:encodes']));
-
 // lint
 
-gulp.task('lint:es', async () => {
+gulp.task('lint', async () => {
 	await exec('eslint', ['.']);
 });
-
-gulp.task('lint', gulp.parallel(['lint:es']));
 
 // formatting
 
