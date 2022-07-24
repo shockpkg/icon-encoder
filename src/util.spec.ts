@@ -1,6 +1,5 @@
+import {readFile} from 'fs/promises';
 import {join as pathJoin} from 'path';
-
-import fse from 'fs-extra';
 
 import {pngIhdr} from './util';
 
@@ -46,7 +45,7 @@ describe('util', () => {
 			// eslint-disable-next-line no-loop-func
 			it(`${name}: ${size}`, async () => {
 				const info = pngIhdr(
-					await fse.readFile(specIconFilePng(name, size))
+					await readFile(specIconFilePng(name, size))
 				);
 
 				expect(info.width).toBe(size);

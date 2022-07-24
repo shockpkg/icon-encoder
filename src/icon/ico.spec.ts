@@ -1,4 +1,5 @@
-import fse from 'fs-extra';
+import {mkdir, readFile, writeFile} from 'fs/promises';
+import {dirname} from 'path';
 
 import {specIconsPng, specIconFilePng, encodeFile} from '../util.spec';
 
@@ -16,13 +17,12 @@ describe('icon/ico', () => {
 					const ico = new IconIco();
 					for (const size of sizes) {
 						// eslint-disable-next-line no-await-in-loop
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
-						);
+						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png);
 					}
 					const data = ico.encode();
-					await fse.outputFile(dest, data);
+					await mkdir(dirname(dest), {recursive: true});
+					await writeFile(dest, data);
 				});
 
 				it('all-bmp', async () => {
@@ -30,13 +30,12 @@ describe('icon/ico', () => {
 					const ico = new IconIco();
 					for (const size of sizes) {
 						// eslint-disable-next-line no-await-in-loop
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
-						);
+						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, false);
 					}
 					const data = ico.encode();
-					await fse.outputFile(dest, data);
+					await mkdir(dirname(dest), {recursive: true});
+					await writeFile(dest, data);
 				});
 
 				it('all-png', async () => {
@@ -44,25 +43,23 @@ describe('icon/ico', () => {
 					const ico = new IconIco();
 					for (const size of sizes) {
 						// eslint-disable-next-line no-await-in-loop
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
-						);
+						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, true);
 					}
 					const data = ico.encode();
-					await fse.outputFile(dest, data);
+					await mkdir(dirname(dest), {recursive: true});
+					await writeFile(dest, data);
 				});
 
 				for (const size of sizes) {
 					it(`${size}`, async () => {
 						const dest = encodeFile('ico', name, `${size}.ico`);
 						const ico = new IconIco();
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
-						);
+						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png);
 						const data = ico.encode();
-						await fse.outputFile(dest, data);
+						await mkdir(dirname(dest), {recursive: true});
+						await writeFile(dest, data);
 					});
 				}
 
@@ -70,12 +67,11 @@ describe('icon/ico', () => {
 					it(`${size}-bmp`, async () => {
 						const dest = encodeFile('ico', name, `${size}-bmp.ico`);
 						const ico = new IconIco();
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
-						);
+						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, false);
 						const data = ico.encode();
-						await fse.outputFile(dest, data);
+						await mkdir(dirname(dest), {recursive: true});
+						await writeFile(dest, data);
 					});
 				}
 
@@ -83,12 +79,11 @@ describe('icon/ico', () => {
 					it(`${size}-png`, async () => {
 						const dest = encodeFile('ico', name, `${size}-png.ico`);
 						const ico = new IconIco();
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
-						);
+						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, true);
 						const data = ico.encode();
-						await fse.outputFile(dest, data);
+						await mkdir(dirname(dest), {recursive: true});
+						await writeFile(dest, data);
 					});
 				}
 
@@ -100,12 +95,11 @@ describe('icon/ico', () => {
 							`${size}-png-raw.ico`
 						);
 						const ico = new IconIco();
-						const png = await fse.readFile(
-							specIconFilePng(name, size)
-						);
+						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, true, true);
 						const data = ico.encode();
-						await fse.outputFile(dest, data);
+						await mkdir(dirname(dest), {recursive: true});
+						await writeFile(dest, data);
 					});
 				}
 			});

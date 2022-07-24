@@ -1,4 +1,5 @@
-import fse from 'fs-extra';
+import {mkdir, readFile, writeFile} from 'fs/promises';
+import {dirname} from 'path';
 
 import {specIconsPng, specIconFilePng, encodeFile} from '../util.spec';
 
@@ -60,13 +61,14 @@ describe('icon/icns', () => {
 						icns.toc = toc;
 						for (const [, size, types] of sizes) {
 							// eslint-disable-next-line no-await-in-loop
-							const png = await fse.readFile(
+							const png = await readFile(
 								specIconFilePng(name, size)
 							);
 							icns.addFromPng(png, types);
 						}
 						const data = icns.encode();
-						await fse.outputFile(dest, data);
+						await mkdir(dirname(dest), {recursive: true});
+						await writeFile(dest, data);
 					});
 				}
 
@@ -80,12 +82,13 @@ describe('icon/icns', () => {
 								`${version}-${sizeName}-${suffix}.icns`
 							);
 							const icns = new IconIcns();
-							const png = await fse.readFile(
+							const png = await readFile(
 								specIconFilePng(name, size)
 							);
 							icns.addFromPng(png, types, raw);
 							const data = icns.encode();
-							await fse.outputFile(dest, data);
+							await mkdir(dirname(dest), {recursive: true});
+							await writeFile(dest, data);
 						});
 					}
 				}
