@@ -26,6 +26,9 @@
 	"types": "lib/index.d.ts",
 	"module": "module.mjs",
 	"sideEffects": false,
+	"bin": {
+		"shockpkg-icon-encoder": "./bin/icon-encoder.js"
+	},
 	"engines": {
 		"node": ">=14.15.0"
 	},
