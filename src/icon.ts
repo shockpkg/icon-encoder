@@ -5,13 +5,11 @@ import {IImageData} from './types';
 /**
  * Icon object.
  */
-export abstract class Icon extends Object {
+export abstract class Icon {
 	/**
 	 * Icon constructor.
 	 */
-	constructor() {
-		super();
-	}
+	constructor() {}
 
 	/**
 	 * Decode PNG data to RGBA image.
