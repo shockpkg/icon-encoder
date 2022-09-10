@@ -18,7 +18,25 @@ NOTE: Not all encode formats are currently supported but the major ones are.
 
 # Usage
 
-## Basic Usage
+## CLI Usage
+
+```
+$ npx @shockpkg/icon-encoder
+$ npm exec @shockpkg/icon-encoder
+$ npm exec shockpkg-icon-encoder
+```
+
+```
+Usage: shockpkg-icon-encoder [options...] (icon.ico | icon.icns) pngs...
+  -v, --version       Show the current version.
+  -h, --help          Show this help message.
+  --raw               Prefer raw png data in icon.
+  --png               Prefer png encoding in ico.
+  --bmp               Prefer bmp encoding in ico.
+  --toc               Include TOC entry in icns.
+```
+
+## API Usage
 
 ### Windows ICO
 
