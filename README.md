@@ -66,9 +66,9 @@ fs.writeFileSync('icon.ico', ico.encode());
 
 ```js
 import fs from 'fs';
-import {IconIcnc} from '@shockpkg/icon-encoder';
+import {IconIcns} from '@shockpkg/icon-encoder';
 
-const icns = new IconIcnc();
+const icns = new IconIcns();
 
 // Optionally include the TOC (table of contents) header.
 // Newer icons will often include this, the default is false.
@@ -97,9 +97,9 @@ fs.writeFileSync('icon.icns', icns.encode());
 
 ```js
 import fs from 'fs';
-import {IconIcnc} from '@shockpkg/icon-encoder';
+import {IconIcns} from '@shockpkg/icon-encoder';
 
-const icns = new IconIcnc();
+const icns = new IconIcns();
 icns.addFromPng(fs.readFileSync('icon/16x16.png'), ['is32', 's8mk']);
 icns.addFromPng(fs.readFileSync('icon/32x32.png'), ['il32', 'l8mk']);
 icns.addFromPng(fs.readFileSync('icon/48x48.png'), ['ih32', 'h8mk']);
