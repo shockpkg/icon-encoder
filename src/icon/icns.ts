@@ -2,8 +2,6 @@ import {IImageData} from '../types';
 import {Icon} from '../icon';
 import {concatUint8Arrays, packBitsIcns} from '../util';
 
-const typeArgb = ['ic04', 'ic05'];
-
 const typePng = [
 	'icp4',
 	'icp5',
@@ -17,6 +15,8 @@ const typePng = [
 	'ic13',
 	'ic14'
 ];
+
+const typeArgb = ['ic04', 'ic05'];
 
 const typeIcon24Bit = ['is32', 'il32', 'ih32', 'it32'];
 
@@ -188,17 +188,17 @@ export class IconIcns extends Icon {
 	 * @param type Type to encode as.
 	 */
 	protected _addFromRgbaType(imageData: Readonly<IImageData>, type: string) {
-		if (this._typeArgb.has(type)) {
-			this.entries.push({
-				type,
-				data: this._encodeRgbaToTypeArgb(imageData, type)
-			});
-			return;
-		}
 		if (this._typePng.has(type)) {
 			this.entries.push({
 				type,
 				data: this._encodeRgbaToTypePng(imageData, type)
+			});
+			return;
+		}
+		if (this._typeArgb.has(type)) {
+			this.entries.push({
+				type,
+				data: this._encodeRgbaToTypeArgb(imageData, type)
 			});
 			return;
 		}
@@ -220,6 +220,20 @@ export class IconIcns extends Icon {
 	}
 
 	/**
+	 * Encode RGBA image data to PNG.
+	 *
+	 * @param imageData RGBA image data.
+	 * @param _type Icon type.
+	 * @returns Encoded data.
+	 */
+	protected _encodeRgbaToTypePng(
+		imageData: Readonly<IImageData>,
+		_type: string
+	) {
+		return this._encodeRgbaToPng(imageData);
+	}
+
+	/**
 	 * Encode RGBA image data to ARGB.
 	 *
 	 * @param imageData RGBA image data.
@@ -236,20 +250,6 @@ export class IconIcns extends Icon {
 			true,
 			new Uint8Array([65, 82, 71, 66])
 		);
-	}
-
-	/**
-	 * Encode RGBA image data to PNG.
-	 *
-	 * @param imageData RGBA image data.
-	 * @param _type Icon type.
-	 * @returns Encoded data.
-	 */
-	protected _encodeRgbaToTypePng(
-		imageData: Readonly<IImageData>,
-		_type: string
-	) {
-		return this._encodeRgbaToPng(imageData);
 	}
 
 	/**
