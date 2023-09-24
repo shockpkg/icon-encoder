@@ -1,5 +1,6 @@
-import {mkdir, readFile, writeFile} from 'fs/promises';
-import {dirname} from 'path';
+import {describe, it} from 'node:test';
+import {mkdir, readFile, writeFile} from 'node:fs/promises';
+import {dirname} from 'node:path';
 
 import {specIconsPng, specIconFilePng, encodeFile} from '../util.spec';
 
@@ -44,14 +45,14 @@ function* genTests() {
 	}
 }
 
-describe('icon/icns', () => {
-	describe('IconIcns', () => {
+void describe('icon/icns', () => {
+	void describe('IconIcns', () => {
 		for (const {name, version, sizes} of genTests()) {
 			// eslint-disable-next-line no-loop-func
-			describe(name, () => {
+			void describe(name, () => {
 				for (const toc of [false, true]) {
 					const suffix = toc ? '-toc' : '';
-					it(`${version}-all${suffix}`, async () => {
+					void it(`${version}-all${suffix}`, async () => {
 						const dest = encodeFile(
 							'icns',
 							name,
@@ -74,12 +75,12 @@ describe('icon/icns', () => {
 
 				for (const raw of [false, true]) {
 					for (const [sizeName, size, types] of sizes) {
-						const suffix = raw ? 'raw' : 'enc';
-						it(`${version}-${sizeName}-${suffix}`, async () => {
+						const suffix = raw ? '-raw' : '-enc';
+						void it(`${version}-${sizeName}${suffix}`, async () => {
 							const dest = encodeFile(
 								'icns',
 								name,
-								`${version}-${sizeName}-${suffix}.icns`
+								`${version}-${sizeName}${suffix}.icns`
 							);
 							const icns = new IconIcns();
 							const png = await readFile(

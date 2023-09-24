@@ -1,3 +1,5 @@
 /package-lock.json
-/lib
+/dts
+/esm
+/cjs
 /spec/encodes

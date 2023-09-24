@@ -1,7 +1,4 @@
-import {readFile} from 'fs/promises';
-import {join as pathJoin} from 'path';
-
-import {pngIhdr} from './util';
+import {join as pathJoin} from 'node:path';
 
 export const specFixturesPath = pathJoin('spec', 'fixtures');
 export const specEncodesPath = pathJoin('spec', 'encodes');
@@ -38,19 +35,3 @@ export function* genPngFiles() {
 		}
 	}
 }
-
-describe('util', () => {
-	describe('pngIhdr', () => {
-		for (const {name, size} of genPngFiles()) {
-			// eslint-disable-next-line no-loop-func
-			it(`${name}: ${size}`, async () => {
-				const info = pngIhdr(
-					await readFile(specIconFilePng(name, size))
-				);
-
-				expect(info.width).toBe(size);
-				expect(info.height).toBe(size);
-			});
-		}
-	});
-});

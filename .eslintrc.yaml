@@ -246,6 +246,10 @@ rules:
         MethodDefinition: true
       checkGetters: true
       checkSetters: true
+  jsdoc/tag-lines:
+    - warn
+    - never
+    - startLines: 1
 
   # TypeScript Simple:
   '@typescript-eslint/array-type': error
@@ -445,12 +449,20 @@ overrides:
     rules:
       '@typescript-eslint/no-unsafe-assignment': off
       '@typescript-eslint/no-unsafe-member-access': off
+      '@typescript-eslint/no-unsafe-call': off
+      '@typescript-eslint/no-unsafe-return': off
   - files:
       - '*.ts'
       - '*.tsx'
     rules:
       jsdoc/no-types: warn
   - files:
+      - '*.test.js'
+      - '*.test.jsx'
+      - '*.test.mjs'
+      - '*.test.mjsx'
+      - '*.test.ts'
+      - '*.test.tsx'
       - '*.spec.js'
       - '*.spec.jsx'
       - '*.spec.mjs'
@@ -458,9 +470,13 @@ overrides:
       - '*.spec.ts'
       - '*.spec.tsx'
     rules:
+      no-void: off
       jsdoc/require-jsdoc: off
+      '@typescript-eslint/no-floating-promises':
+        - error
+        - ignoreVoid: true
   - files:
-      - 'gulpfile.babel.ts'
+      - 'babel.config.js'
     rules:
       import/no-extraneous-dependencies:
         - error
@@ -468,6 +484,10 @@ overrides:
           optionalDependencies: false
           peerDependencies: false
       jsdoc/require-jsdoc: off
+      '@typescript-eslint/no-require-imports': off
+      '@typescript-eslint/no-var-requires': off
+    parserOptions:
+      sourceType: script
   - files:
       - 'bin/*.js'
     rules:
@@ -476,6 +496,7 @@ overrides:
       jsdoc/require-jsdoc: off
       '@typescript-eslint/naming-convention': off
       '@typescript-eslint/no-require-imports': off
+      '@typescript-eslint/no-var-requires': off
       '@typescript-eslint/no-unsafe-argument': off
       '@typescript-eslint/no-unsafe-call': off
       '@typescript-eslint/no-unsafe-return': off
