@@ -54,7 +54,7 @@ export class IconIco extends Icon {
 		if (raw && png !== false) {
 			const ihdr = pngIhdr(data);
 			const isPng =
-				png || !this._sizeRequiresLegacyBitmap(ihdr.width, ihdr.height);
+				png || !this.sizeRequiresLegacyBitmap(ihdr.width, ihdr.height);
 			if (isPng) {
 				this.entries.push({
 					width: ihdr.width,
@@ -81,7 +81,7 @@ export class IconIco extends Icon {
 		const isPng =
 			png ||
 			(png === null &&
-				!this._sizeRequiresLegacyBitmap(
+				!this.sizeRequiresLegacyBitmap(
 					imageData.width,
 					imageData.height
 				));
@@ -117,6 +117,17 @@ export class IconIco extends Icon {
 			size += dataSize + ent.length;
 		}
 		return Buffer.concat([dir, ...dirs, ...imgs], size);
+	}
+
+	/**
+	 * Check if height requires legacy bitmap for compatiblity.
+	 *
+	 * @param width Image width.
+	 * @param height Image height.
+	 * @returns Returns true if requires legacy bitmap.
+	 */
+	public sizeRequiresLegacyBitmap(width: number, height: number) {
+		return width < 64 || height < 64;
 	}
 
 	/**
@@ -237,16 +248,5 @@ export class IconIco extends Icon {
 			}
 		}
 		return encoded;
-	}
-
-	/**
-	 * Check if height requires legacy bitmap for compatiblity.
-	 *
-	 * @param width Image width.
-	 * @param height Image height.
-	 * @returns Returns true if requires legacy bitmap.
-	 */
-	protected _sizeRequiresLegacyBitmap(width: number, height: number) {
-		return width < 64 || height < 64;
 	}
 }
