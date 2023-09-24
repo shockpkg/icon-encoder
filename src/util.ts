@@ -1,6 +1,26 @@
 import {IPngIhdr} from './types';
 
 /**
+ * Concatenate multiple Uint8Array together.
+ *
+ * @param arrays Uint8Array arrays.
+ * @returns Uint8Array array.
+ */
+export function concatUint8Arrays(arrays: Readonly<Uint8Array>[]) {
+	let l = 0;
+	for (const a of arrays) {
+		l += a.length;
+	}
+	const r = new Uint8Array(l);
+	let i = 0;
+	for (const a of arrays) {
+		r.set(a, i);
+		i += a.length;
+	}
+	return r;
+}
+
+/**
  * Read PNG IHDR data.
  *
  * @param data PNG data.

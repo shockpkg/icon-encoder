@@ -21,7 +21,7 @@ void describe('icon/ico', () => {
 						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png);
 					}
-					const data = ico.encode();
+					const data = Buffer.from(ico.encode());
 					await mkdir(dirname(dest), {recursive: true});
 					await writeFile(dest, data);
 				});
@@ -34,7 +34,7 @@ void describe('icon/ico', () => {
 						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, false);
 					}
-					const data = ico.encode();
+					const data = Buffer.from(ico.encode());
 					await mkdir(dirname(dest), {recursive: true});
 					await writeFile(dest, data);
 				});
@@ -47,7 +47,7 @@ void describe('icon/ico', () => {
 						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, true);
 					}
-					const data = ico.encode();
+					const data = Buffer.from(ico.encode());
 					await mkdir(dirname(dest), {recursive: true});
 					await writeFile(dest, data);
 				});
@@ -58,7 +58,7 @@ void describe('icon/ico', () => {
 						const ico = new IconIco();
 						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png);
-						const data = ico.encode();
+						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);
 					});
@@ -70,7 +70,7 @@ void describe('icon/ico', () => {
 						const ico = new IconIco();
 						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, false);
-						const data = ico.encode();
+						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);
 					});
@@ -82,7 +82,7 @@ void describe('icon/ico', () => {
 						const ico = new IconIco();
 						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, true);
-						const data = ico.encode();
+						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);
 					});
@@ -98,7 +98,7 @@ void describe('icon/ico', () => {
 						const ico = new IconIco();
 						const png = await readFile(specIconFilePng(name, size));
 						ico.addFromPng(png, true, true);
-						const data = ico.encode();
+						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);
 					});

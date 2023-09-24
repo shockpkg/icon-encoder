@@ -59,5 +59,5 @@ export abstract class Icon {
 	 *
 	 * @returns Encoded icon.
 	 */
-	public abstract encode(): Buffer;
+	public abstract encode(): Uint8Array;
 }

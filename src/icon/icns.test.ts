@@ -67,7 +67,7 @@ void describe('icon/icns', () => {
 							);
 							icns.addFromPng(png, types);
 						}
-						const data = icns.encode();
+						const data = Buffer.from(icns.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);
 					});
@@ -87,7 +87,7 @@ void describe('icon/icns', () => {
 								specIconFilePng(name, size)
 							);
 							icns.addFromPng(png, types, raw);
-							const data = icns.encode();
+							const data = Buffer.from(icns.encode());
 							await mkdir(dirname(dest), {recursive: true});
 							await writeFile(dest, data);
 						});

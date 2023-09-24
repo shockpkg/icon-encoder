@@ -2,6 +2,7 @@ import {encode as packbitsEncode} from '@fiahfy/packbits';
 
 import {IImageData} from '../types';
 import {Icon} from '../icon';
+import {concatUint8Arrays} from '../util';
 
 const typeArgb = ['ic04', 'ic05'];
 
@@ -36,7 +37,7 @@ export interface IIconIcnsEntry {
 	/**
 	 * Icon data.
 	 */
-	readonly data: Readonly<Buffer>;
+	readonly data: Readonly<Uint8Array>;
 }
 
 /**
@@ -101,7 +102,7 @@ export class IconIcns extends Icon {
 			if (this._typePng.has(type)) {
 				this.entries.push({
 					type,
-					data: Buffer.concat([data as Buffer], data.length)
+					data: new Uint8Array(data)
 				});
 				continue;
 			}
@@ -132,33 +133,54 @@ export class IconIcns extends Icon {
 	 */
 	public encode() {
 		const {toc} = this;
-		const head = Buffer.alloc(8);
-		head.write('icns', 0);
+		const headName = new Uint8Array([105, 99, 110, 115]);
+		const headSize = new Uint8Array(4);
 		let size = 8;
-		let tocSize = 8;
-		const tocHead = toc ? Buffer.from('TOC ----') : null;
-		const tocs = tocHead ? [tocHead] : [];
-		const images = [];
+		let tocSizeValue = 8;
+		const tocs = toc
+			? [new Uint8Array([84, 79, 67, 32]), new Uint8Array(4)]
+			: null;
+		const imgs = [];
 		for (const {type, data} of this.entries) {
-			const tagType = Buffer.alloc(4);
-			tagType.write(type, 0);
-			const tagSize = Buffer.alloc(4);
-			const tagSizeValue = data.length + 8;
-			tagSize.writeUInt32BE(tagSizeValue, 0);
-			if (toc) {
-				tocs.push(tagType, tagSize);
-				tocSize += 8;
+			const imgName = new Uint8Array(4);
+			for (let i = 0; i < 4; i++) {
+				imgName[i] = type.charCodeAt(i) || 0;
+			}
+			const imgSize = new Uint8Array(4);
+			const imgSizeValue = data.length + 8;
+			new DataView(
+				imgSize.buffer,
+				imgSize.byteOffset,
+				imgSize.byteLength
+			).setUint32(0, imgSizeValue, false);
+			if (tocs) {
+				tocs.push(imgName, imgSize);
+				tocSizeValue += 8;
 				size += 8;
 			}
-			images.push(tagType, tagSize, data);
-			size += tagSizeValue;
+			imgs.push(imgName, imgSize, data);
+			size += imgSizeValue;
 		}
-		if (tocHead) {
-			tocHead.writeUInt32BE(tocSize, 4);
+		if (tocs) {
+			const [, tocSize] = tocs;
+			new DataView(
+				tocSize.buffer,
+				tocSize.byteOffset,
+				tocSize.byteLength
+			).setUint32(0, tocSizeValue, false);
 			size += 8;
 		}
-		head.writeUInt32BE(size, 4);
-		return Buffer.concat([head, ...tocs, ...images], size);
+		new DataView(
+			headSize.buffer,
+			headSize.byteOffset,
+			headSize.byteLength
+		).setUint32(0, size, false);
+		return concatUint8Arrays([
+			headName,
+			headSize,
+			...(tocs || []),
+			...imgs
+		]);
 	}
 
 	/**
@@ -214,7 +236,7 @@ export class IconIcns extends Icon {
 		return this._encodeRgbaToPackBits(
 			imageData,
 			true,
-			Buffer.from('ARGB', 'ascii')
+			new Uint8Array([65, 82, 71, 66])
 		);
 	}
 
@@ -247,7 +269,7 @@ export class IconIcns extends Icon {
 		return this._encodeRgbaToPackBits(
 			imageData,
 			false,
-			type === 'it32' ? Buffer.alloc(4) : null
+			type === 'it32' ? new Uint8Array(4) : null
 		);
 	}
 
@@ -276,9 +298,9 @@ export class IconIcns extends Icon {
 	protected _encodeRgbaToPackBits(
 		imageData: Readonly<IImageData>,
 		alpha: boolean,
-		header: Readonly<Buffer> | null = null
+		header: Readonly<Uint8Array> | null = null
 	) {
-		const pieces = header ? [header] : [];
+		const pieces: Uint8Array[] = header ? [header] : [];
 		if (alpha) {
 			// A:
 			pieces.push(
@@ -291,7 +313,7 @@ export class IconIcns extends Icon {
 			this._encodePackBitsIcns(this._encodeRgbaChannel(imageData, 1)),
 			this._encodePackBitsIcns(this._encodeRgbaChannel(imageData, 2))
 		);
-		return Buffer.concat(pieces as Buffer[]);
+		return concatUint8Arrays(pieces);
 	}
 
 	/**
@@ -307,9 +329,9 @@ export class IconIcns extends Icon {
 	) {
 		const {data} = imageData;
 		const size = data.length;
-		const encoded = Buffer.alloc(size / 4);
+		const encoded = new Uint8Array(size / 4);
 		for (let i = index, j = 0; i < size; i += 4) {
-			encoded.writeUInt8(data[i], j++);
+			encoded[j++] = data[i];
 		}
 		return encoded;
 	}
@@ -320,9 +342,13 @@ export class IconIcns extends Icon {
 	 * @param data Data to be compressed.
 	 * @returns Compressed data.
 	 */
-	protected _encodePackBitsIcns(data: Readonly<Buffer>) {
-		return packbitsEncode(data as Buffer, {
-			format: 'icns'
-		});
+	protected _encodePackBitsIcns(data: Readonly<Uint8Array>) {
+		const b = packbitsEncode(
+			Buffer.from(data.buffer, data.byteOffset, data.byteLength),
+			{
+				format: 'icns'
+			}
+		);
+		return new Uint8Array(b.buffer, b.byteOffset, b.byteLength);
 	}
 }
