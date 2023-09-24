@@ -189,21 +189,22 @@ export class IconIco extends Icon {
 		// Calculate the piece offsets.
 		const imgOffset = headerSize;
 		const maskOff = imgOffset + dataSize;
-		const encoded = Buffer.alloc(headerSize + bodySize);
+		const r = new Uint8Array(headerSize + bodySize);
+		const encoded = new DataView(r.buffer, r.byteOffset, r.byteLength);
 
 		// Structure: BITMAPINFOHEADER.
 		// Height is doubled for alpha channel.
-		encoded.writeUInt32LE(40, 0);
-		encoded.writeInt32LE(width, 4);
-		encoded.writeInt32LE(height * 2, 8);
-		encoded.writeUInt16LE(1, 12);
-		encoded.writeUInt16LE(32, 14);
-		encoded.writeUInt32LE(0, 16);
-		encoded.writeUInt32LE(bodySize, 20);
-		encoded.writeInt32LE(3780, 24);
-		encoded.writeInt32LE(3780, 28);
-		encoded.writeUInt32LE(0, 32);
-		encoded.writeUInt32LE(0, 36);
+		encoded.setUint32(0, 40, true);
+		encoded.setInt32(4, width, true);
+		encoded.setInt32(8, height * 2, true);
+		encoded.setUint16(12, 1, true);
+		encoded.setUint16(14, 32, true);
+		encoded.setUint32(16, 0, true);
+		encoded.setUint32(20, bodySize, true);
+		encoded.setInt32(24, 3780, true);
+		encoded.setInt32(28, 3780, true);
+		encoded.setUint32(32, 0, true);
+		encoded.setUint32(36, 0, true);
 
 		// Write image and mask, reverse the row order.
 		const cols = width * 4;
@@ -221,16 +222,16 @@ export class IconIco extends Icon {
 				const b = data[pos++];
 				const a = data[pos];
 				pos = end - row + col;
-				encoded.writeUInt8(b, imgOffset + pos++);
-				encoded.writeUInt8(g, imgOffset + pos++);
-				encoded.writeUInt8(r, imgOffset + pos++);
-				encoded.writeUInt8(a, imgOffset + pos);
+				encoded.setUint8(imgOffset + pos++, b);
+				encoded.setUint8(imgOffset + pos++, g);
+				encoded.setUint8(imgOffset + pos++, r);
+				encoded.setUint8(imgOffset + pos, a);
 
 				// Write mask bits after image data.
 				// eslint-disable-next-line no-bitwise
 				bits = (bits << 1) | (data[pos] === 0 ? 1 : 0);
 				if (++bitc === 8) {
-					encoded.writeUInt8(bits, maskOff + maskI++);
+					encoded.setUint8(maskOff + maskI++, bits);
 					bits = 0;
 					bitc = 0;
 				}
@@ -241,12 +242,12 @@ export class IconIco extends Icon {
 				// eslint-disable-next-line no-bitwise
 				bits <<= 1;
 				if (++bitc === 8) {
-					encoded.writeUInt8(bits, maskOff + maskI++);
+					encoded.setUint8(maskOff + maskI++, bits);
 					bits = 0;
 					bitc = 0;
 				}
 			}
 		}
-		return encoded;
+		return Buffer.from(r);
 	}
 }
