@@ -11,7 +11,7 @@ void describe('util', () => {
 			// eslint-disable-next-line no-loop-func
 			void it(`${name}: ${size}`, async () => {
 				const info = pngIhdr(
-					await readFile(specIconFilePng(name, size))
+					new Uint8Array(await readFile(specIconFilePng(name, size)))
 				);
 
 				strictEqual(info.width, size);

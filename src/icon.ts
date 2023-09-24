@@ -18,7 +18,7 @@ export abstract class Icon {
 	 * @returns Image data.
 	 */
 	protected _decodePngToRgba(data: Readonly<Buffer>) {
-		const image = UPNG.decode(data as Buffer);
+		const image = UPNG.decode(data);
 		return {
 			width: image.width,
 			height: image.height,
