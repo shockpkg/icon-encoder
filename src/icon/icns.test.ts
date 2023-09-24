@@ -65,7 +65,8 @@ void describe('icon/icns', () => {
 							const png = await readFile(
 								specIconFilePng(name, size)
 							);
-							icns.addFromPng(png, types);
+							// eslint-disable-next-line no-await-in-loop
+							await icns.addFromPng(png, types);
 						}
 						const data = Buffer.from(icns.encode());
 						await mkdir(dirname(dest), {recursive: true});
@@ -86,7 +87,7 @@ void describe('icon/icns', () => {
 							const png = await readFile(
 								specIconFilePng(name, size)
 							);
-							icns.addFromPng(png, types, raw);
+							await icns.addFromPng(png, types, raw);
 							const data = Buffer.from(icns.encode());
 							await mkdir(dirname(dest), {recursive: true});
 							await writeFile(dest, data);

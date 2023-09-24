@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const {readFile, writeFile} = require('fs/promises');
+const {readFile, writeFile} = require('node:fs/promises');
 
 const {VERSION, IconIcns, IconIco} = require('..');
 
@@ -52,7 +52,8 @@ async function createIcns(pngs, toc, raw) {
 	}
 	for (const [file, type, data] of read) {
 		try {
-			icon.addFromPng(data, [type], raw);
+			// eslint-disable-next-line no-await-in-loop
+			await icon.addFromPng(data, [type], raw);
 		} catch (err) {
 			return [`${file}: ${err.message}`, null];
 		}
@@ -70,7 +71,8 @@ async function createIco(pngs, png, raw) {
 	}
 	for (const [file, data] of read) {
 		try {
-			icon.addFromPng(data, png, raw);
+			// eslint-disable-next-line no-await-in-loop
+			await icon.addFromPng(data, png, raw);
 		} catch (err) {
 			return [`${file}: ${err.message}`, null];
 		}

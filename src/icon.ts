@@ -1,6 +1,7 @@
 import {PNG} from 'pngjs';
 
 import {IImageData} from './types';
+import {concatUint8Arrays} from './util';
 
 /**
  * Icon object.
@@ -17,14 +18,21 @@ export abstract class Icon {
 	 * @param data PNG data.
 	 * @returns Image data.
 	 */
-	protected _decodePngToRgba(data: Readonly<Uint8Array>) {
-		const {
-			width,
-			height,
-			data: d
-		} = PNG.sync.read(
-			Buffer.from(data.buffer, data.byteOffset, data.byteLength)
-		);
+	protected async _decodePngToRgba(data: Readonly<Uint8Array>) {
+		const png = new PNG();
+		await new Promise((resolve, reject) => {
+			png.parse(
+				Buffer.from(data.buffer, data.byteOffset, data.byteLength),
+				err => {
+					if (err) {
+						reject(err);
+						return;
+					}
+					resolve(png);
+				}
+			);
+		});
+		const {width, height, data: d} = png;
 		return {
 			width,
 			height,
@@ -38,16 +46,26 @@ export abstract class Icon {
 	 * @param imageData Image data.
 	 * @returns PNG data.
 	 */
-	protected _encodeRgbaToPng(imageData: Readonly<IImageData>) {
+	protected async _encodeRgbaToPng(imageData: Readonly<IImageData>) {
 		const {width, height, data} = imageData;
-		const png = new PNG({width, height});
-		png.data = Buffer.from(data.buffer, data.byteOffset, data.byteLength);
-		const d = PNG.sync.write(png, {
+		const png = new PNG({
+			width,
+			height,
 			deflateLevel: 9,
 			deflateStrategy: 1,
 			deflateChunkSize: 32 * 1024
 		});
-		return new Uint8Array(d.buffer, d.byteOffset, d.byteLength);
+		png.data = Buffer.from(data.buffer, data.byteOffset, data.byteLength);
+		const packed: Uint8Array[] = [];
+		await new Promise((resolve, reject) => {
+			png.on('data', (d: Buffer) => {
+				packed.push(d);
+			});
+			png.on('error', reject);
+			png.on('end', resolve);
+			png.pack();
+		});
+		return concatUint8Arrays(packed);
 	}
 
 	/**

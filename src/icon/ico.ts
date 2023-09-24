@@ -46,7 +46,7 @@ export class IconIco extends Icon {
 	 * @param png Encode entry as PNG.
 	 * @param raw Use raw PNG data without re-encoding, if using PNG format.
 	 */
-	public addFromPng(
+	public async addFromPng(
 		data: Readonly<Uint8Array>,
 		png: boolean | null = null,
 		raw = false
@@ -64,7 +64,7 @@ export class IconIco extends Icon {
 				return;
 			}
 		}
-		this.addFromRgba(this._decodePngToRgba(data), png);
+		await this.addFromRgba(await this._decodePngToRgba(data), png);
 	}
 
 	/**
@@ -73,7 +73,7 @@ export class IconIco extends Icon {
 	 * @param imageData RGBA image data.
 	 * @param png Encode entry as PNG.
 	 */
-	public addFromRgba(
+	public async addFromRgba(
 		imageData: Readonly<IImageData>,
 		png: boolean | null = null
 	) {
@@ -90,7 +90,7 @@ export class IconIco extends Icon {
 			width: imageData.width,
 			height: imageData.height,
 			data: isPng
-				? this._encodeRgbaToPng(imageData)
+				? await this._encodeRgbaToPng(imageData)
 				: this._encodeRgbaToBmp(imageData)
 		});
 	}

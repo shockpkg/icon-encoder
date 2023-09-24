@@ -53,12 +53,12 @@ const png = null;
 const raw = false;
 
 const ico = new IconIco();
-ico.addFromPng(await readFile('icon/256x256.png'), png, raw);
-ico.addFromPng(await readFile('icon/128x128.png'), png, raw);
-ico.addFromPng(await readFile('icon/64x64.png'), png, raw);
-ico.addFromPng(await readFile('icon/48x48.png'), png, raw);
-ico.addFromPng(await readFile('icon/32x32.png'), png, raw);
-ico.addFromPng(await readFile('icon/16x16.png'), png, raw);
+await ico.addFromPng(await readFile('icon/256x256.png'), png, raw);
+await ico.addFromPng(await readFile('icon/128x128.png'), png, raw);
+await ico.addFromPng(await readFile('icon/64x64.png'), png, raw);
+await ico.addFromPng(await readFile('icon/48x48.png'), png, raw);
+await ico.addFromPng(await readFile('icon/32x32.png'), png, raw);
+await ico.addFromPng(await readFile('icon/16x16.png'), png, raw);
 await writeFile('icon.ico', ico.encode());
 ```
 
@@ -80,16 +80,16 @@ const raw = false;
 
 // This order matches that of iconutil with the same image set in macOS 10.14.
 // Images with @2x are just 2x the size their file name suggests.
-icns.addFromPng(await readFile('icon/32x32@2x.png'), ['ic12'], raw);
-icns.addFromPng(await readFile('icon/128x128.png'), ['ic07'], raw);
-icns.addFromPng(await readFile('icon/128x128@2x.png'), ['ic13'], raw);
-icns.addFromPng(await readFile('icon/256x256.png'), ['ic08'], raw);
-icns.addFromPng(await readFile('icon/16x16.png'), ['ic04'], raw);
-icns.addFromPng(await readFile('icon/256x256@2x.png'), ['ic14'], raw);
-icns.addFromPng(await readFile('icon/512x512.png'), ['ic09'], raw);
-icns.addFromPng(await readFile('icon/32x32.png'), ['ic05'], raw);
-icns.addFromPng(await readFile('icon/512x512@2x.png'), ['ic10'], raw);
-icns.addFromPng(await readFile('icon/16x16@2x.png'), ['ic11'], raw);
+await icns.addFromPng(await readFile('icon/32x32@2x.png'), ['ic12'], raw);
+await icns.addFromPng(await readFile('icon/128x128.png'), ['ic07'], raw);
+await icns.addFromPng(await readFile('icon/128x128@2x.png'), ['ic13'], raw);
+await icns.addFromPng(await readFile('icon/256x256.png'), ['ic08'], raw);
+await icns.addFromPng(await readFile('icon/16x16.png'), ['ic04'], raw);
+await icns.addFromPng(await readFile('icon/256x256@2x.png'), ['ic14'], raw);
+await icns.addFromPng(await readFile('icon/512x512.png'), ['ic09'], raw);
+await icns.addFromPng(await readFile('icon/32x32.png'), ['ic05'], raw);
+await icns.addFromPng(await readFile('icon/512x512@2x.png'), ['ic10'], raw);
+await icns.addFromPng(await readFile('icon/16x16@2x.png'), ['ic11'], raw);
 await writeFile('icon.icns', icns.encode());
 ```
 
@@ -100,10 +100,10 @@ import {readFile, writeFile} from 'node:fs/promises';
 import {IconIcns} from '@shockpkg/icon-encoder';
 
 const icns = new IconIcns();
-icns.addFromPng(await readFile('icon/16x16.png'), ['is32', 's8mk']);
-icns.addFromPng(await readFile('icon/32x32.png'), ['il32', 'l8mk']);
-icns.addFromPng(await readFile('icon/48x48.png'), ['ih32', 'h8mk']);
-icns.addFromPng(await readFile('icon/128x128.png'), ['it32', 't8mk']);
+await icns.addFromPng(await readFile('icon/16x16.png'), ['is32', 's8mk']);
+await icns.addFromPng(await readFile('icon/32x32.png'), ['il32', 'l8mk']);
+await icns.addFromPng(await readFile('icon/48x48.png'), ['ih32', 'h8mk']);
+await icns.addFromPng(await readFile('icon/128x128.png'), ['it32', 't8mk']);
 await writeFile('icon.icns', icns.encode());
 ```
 

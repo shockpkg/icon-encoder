@@ -21,7 +21,8 @@ void describe('icon/ico', () => {
 							// eslint-disable-next-line no-await-in-loop
 							await readFile(specIconFilePng(name, size))
 						);
-						ico.addFromPng(png);
+						// eslint-disable-next-line no-await-in-loop
+						await ico.addFromPng(png);
 					}
 					const data = Buffer.from(ico.encode());
 					await mkdir(dirname(dest), {recursive: true});
@@ -36,7 +37,8 @@ void describe('icon/ico', () => {
 							// eslint-disable-next-line no-await-in-loop
 							await readFile(specIconFilePng(name, size))
 						);
-						ico.addFromPng(png, false);
+						// eslint-disable-next-line no-await-in-loop
+						await ico.addFromPng(png, false);
 					}
 					const data = Buffer.from(ico.encode());
 					await mkdir(dirname(dest), {recursive: true});
@@ -51,7 +53,8 @@ void describe('icon/ico', () => {
 							// eslint-disable-next-line no-await-in-loop
 							await readFile(specIconFilePng(name, size))
 						);
-						ico.addFromPng(png, true);
+						// eslint-disable-next-line no-await-in-loop
+						await ico.addFromPng(png, true);
 					}
 					const data = Buffer.from(ico.encode());
 					await mkdir(dirname(dest), {recursive: true});
@@ -65,7 +68,7 @@ void describe('icon/ico', () => {
 						const png = new Uint8Array(
 							await readFile(specIconFilePng(name, size))
 						);
-						ico.addFromPng(png);
+						await ico.addFromPng(png);
 						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);
@@ -79,7 +82,7 @@ void describe('icon/ico', () => {
 						const png = new Uint8Array(
 							await readFile(specIconFilePng(name, size))
 						);
-						ico.addFromPng(png, false);
+						await ico.addFromPng(png, false);
 						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);
@@ -93,7 +96,7 @@ void describe('icon/ico', () => {
 						const png = new Uint8Array(
 							await readFile(specIconFilePng(name, size))
 						);
-						ico.addFromPng(png, true);
+						await ico.addFromPng(png, true);
 						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);
@@ -111,7 +114,7 @@ void describe('icon/ico', () => {
 						const png = new Uint8Array(
 							await readFile(specIconFilePng(name, size))
 						);
-						ico.addFromPng(png, true, true);
+						await ico.addFromPng(png, true, true);
 						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
 						await writeFile(dest, data);

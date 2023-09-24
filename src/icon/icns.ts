@@ -86,13 +86,13 @@ export class IconIcns extends Icon {
 	 * @param types Types to encode as.
 	 * @param raw Use raw PNG data without re-encoding for the PNG types.
 	 */
-	public addFromPng(
+	public async addFromPng(
 		data: Readonly<Uint8Array>,
 		types: readonly string[],
 		raw = false
 	) {
 		if (!raw) {
-			this.addFromRgba(this._decodePngToRgba(data), types);
+			await this.addFromRgba(await this._decodePngToRgba(data), types);
 			return;
 		}
 		let rgba: IImageData | null = null;
@@ -104,8 +104,10 @@ export class IconIcns extends Icon {
 				});
 				continue;
 			}
-			rgba ||= this._decodePngToRgba(data);
-			this.addFromRgba(rgba, [type]);
+			// eslint-disable-next-line no-await-in-loop
+			rgba ||= await this._decodePngToRgba(data);
+			// eslint-disable-next-line no-await-in-loop
+			await this.addFromRgba(rgba, [type]);
 		}
 	}
 
@@ -115,12 +117,13 @@ export class IconIcns extends Icon {
 	 * @param imageData RGBA image data.
 	 * @param types Types to encode as.
 	 */
-	public addFromRgba(
+	public async addFromRgba(
 		imageData: Readonly<IImageData>,
 		types: readonly string[]
 	) {
 		for (const type of types) {
-			this._addFromRgbaType(imageData, type);
+			// eslint-disable-next-line no-await-in-loop
+			await this._addFromRgbaType(imageData, type);
 		}
 	}
 
@@ -187,11 +190,14 @@ export class IconIcns extends Icon {
 	 * @param imageData RGBA image data.
 	 * @param type Type to encode as.
 	 */
-	protected _addFromRgbaType(imageData: Readonly<IImageData>, type: string) {
+	protected async _addFromRgbaType(
+		imageData: Readonly<IImageData>,
+		type: string
+	) {
 		if (this._typePng.has(type)) {
 			this.entries.push({
 				type,
-				data: this._encodeRgbaToTypePng(imageData, type)
+				data: await this._encodeRgbaToTypePng(imageData, type)
 			});
 			return;
 		}
@@ -226,7 +232,7 @@ export class IconIcns extends Icon {
 	 * @param _type Icon type.
 	 * @returns Encoded data.
 	 */
-	protected _encodeRgbaToTypePng(
+	protected async _encodeRgbaToTypePng(
 		imageData: Readonly<IImageData>,
 		_type: string
 	) {
