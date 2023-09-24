@@ -1,5 +1,7 @@
 import {IPngIhdr} from './types';
 
+const PNG_MAGIC = [137, 80, 78, 71, 13, 10, 26, 10];
+
 /**
  * Concatenate multiple Uint8Array together.
  *
@@ -28,17 +30,10 @@ export function concatUint8Arrays(arrays: Readonly<Readonly<Uint8Array>[]>) {
  */
 export function pngIhdr(data: Readonly<Uint8Array>): IPngIhdr {
 	let i = 0;
-	if (
-		data[i++] !== 137 ||
-		data[i++] !== 80 ||
-		data[i++] !== 78 ||
-		data[i++] !== 71 ||
-		data[i++] !== 13 ||
-		data[i++] !== 10 ||
-		data[i++] !== 26 ||
-		data[i++] !== 10
-	) {
-		throw new Error('Invalid PNG header signature');
+	for (; i < 8; i++) {
+		if (data[i] !== PNG_MAGIC[i]) {
+			throw new Error('Invalid PNG header signature');
+		}
 	}
 
 	// Seek out IHDR tag, which should be first (spec requires, some ignore).
