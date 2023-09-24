@@ -17,7 +17,7 @@ export abstract class Icon {
 	 * @param data PNG data.
 	 * @returns Image data.
 	 */
-	protected _decodePngToRgba(data: Readonly<Buffer>) {
+	protected _decodePngToRgba(data: Readonly<Uint8Array>) {
 		const image = UPNG.decode(data);
 		return {
 			width: image.width,
@@ -33,7 +33,7 @@ export abstract class Icon {
 	 * @returns PNG data.
 	 */
 	protected _encodeRgbaToPng(imageData: Readonly<IImageData>) {
-		return Buffer.from(
+		return new Uint8Array(
 			(
 				UPNG.encode as (
 					imgs: ArrayBuffer[],

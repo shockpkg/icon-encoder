@@ -20,7 +20,7 @@ export interface IIconIcoEntry {
 	/**
 	 * Icon data.
 	 */
-	readonly data: Readonly<Buffer>;
+	readonly data: Readonly<Uint8Array>;
 }
 
 /**
@@ -47,7 +47,7 @@ export class IconIco extends Icon {
 	 * @param raw Use raw PNG data without re-encoding, if using PNG format.
 	 */
 	public addFromPng(
-		data: Readonly<Buffer>,
+		data: Readonly<Uint8Array>,
 		png: boolean | null = null,
 		raw = false
 	) {
@@ -59,7 +59,7 @@ export class IconIco extends Icon {
 				this.entries.push({
 					width: ihdr.width,
 					height: ihdr.height,
-					data: Buffer.concat([data as Buffer], data.length)
+					data: new Uint8Array(data)
 				});
 				return;
 			}
@@ -103,15 +103,15 @@ export class IconIco extends Icon {
 	public encode() {
 		const {entries} = this;
 		const dir = this._encodeIcoDir(entries.length);
-		const dirs: Buffer[] = [];
-		const imgs: Buffer[] = [];
+		const dirs = [];
+		const imgs = [];
 		let offset = dir.length + entries.length * 16;
 		for (const entry of entries) {
 			const {data} = entry;
 			const dataSize = data.length;
 			const ent = this._encodeIcoDirEntry(entry, offset);
 			dirs.push(ent);
-			imgs.push(data as Buffer);
+			imgs.push(data);
 			offset += dataSize;
 		}
 		return concatUint8Arrays([dir, ...dirs, ...imgs]);
@@ -141,7 +141,7 @@ export class IconIco extends Icon {
 		encoded.setUint16(0, 0, true);
 		encoded.setUint16(2, 1, true);
 		encoded.setUint16(4, count, true);
-		return Buffer.from(r);
+		return r;
 	}
 
 	/**
@@ -167,7 +167,7 @@ export class IconIco extends Icon {
 		encoded.setUint16(6, 32, true);
 		encoded.setUint32(8, data.length, true);
 		encoded.setUint32(12, offset, true);
-		return Buffer.from(r);
+		return r;
 	}
 
 	/**
@@ -248,6 +248,6 @@ export class IconIco extends Icon {
 				}
 			}
 		}
-		return Buffer.from(r);
+		return r;
 	}
 }

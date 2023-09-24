@@ -17,8 +17,10 @@ void describe('icon/ico', () => {
 					const dest = encodeFile('ico', name, 'all.ico');
 					const ico = new IconIco();
 					for (const size of sizes) {
-						// eslint-disable-next-line no-await-in-loop
-						const png = await readFile(specIconFilePng(name, size));
+						const png = new Uint8Array(
+							// eslint-disable-next-line no-await-in-loop
+							await readFile(specIconFilePng(name, size))
+						);
 						ico.addFromPng(png);
 					}
 					const data = Buffer.from(ico.encode());
@@ -30,8 +32,10 @@ void describe('icon/ico', () => {
 					const dest = encodeFile('ico', name, 'all-bmp.ico');
 					const ico = new IconIco();
 					for (const size of sizes) {
-						// eslint-disable-next-line no-await-in-loop
-						const png = await readFile(specIconFilePng(name, size));
+						const png = new Uint8Array(
+							// eslint-disable-next-line no-await-in-loop
+							await readFile(specIconFilePng(name, size))
+						);
 						ico.addFromPng(png, false);
 					}
 					const data = Buffer.from(ico.encode());
@@ -43,8 +47,10 @@ void describe('icon/ico', () => {
 					const dest = encodeFile('ico', name, 'all-png.ico');
 					const ico = new IconIco();
 					for (const size of sizes) {
-						// eslint-disable-next-line no-await-in-loop
-						const png = await readFile(specIconFilePng(name, size));
+						const png = new Uint8Array(
+							// eslint-disable-next-line no-await-in-loop
+							await readFile(specIconFilePng(name, size))
+						);
 						ico.addFromPng(png, true);
 					}
 					const data = Buffer.from(ico.encode());
@@ -56,7 +62,9 @@ void describe('icon/ico', () => {
 					void it(`${size}`, async () => {
 						const dest = encodeFile('ico', name, `${size}.ico`);
 						const ico = new IconIco();
-						const png = await readFile(specIconFilePng(name, size));
+						const png = new Uint8Array(
+							await readFile(specIconFilePng(name, size))
+						);
 						ico.addFromPng(png);
 						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
@@ -68,7 +76,9 @@ void describe('icon/ico', () => {
 					void it(`${size}-bmp`, async () => {
 						const dest = encodeFile('ico', name, `${size}-bmp.ico`);
 						const ico = new IconIco();
-						const png = await readFile(specIconFilePng(name, size));
+						const png = new Uint8Array(
+							await readFile(specIconFilePng(name, size))
+						);
 						ico.addFromPng(png, false);
 						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
@@ -80,7 +90,9 @@ void describe('icon/ico', () => {
 					void it(`${size}-png`, async () => {
 						const dest = encodeFile('ico', name, `${size}-png.ico`);
 						const ico = new IconIco();
-						const png = await readFile(specIconFilePng(name, size));
+						const png = new Uint8Array(
+							await readFile(specIconFilePng(name, size))
+						);
 						ico.addFromPng(png, true);
 						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});
@@ -96,7 +108,9 @@ void describe('icon/ico', () => {
 							`${size}-png-raw.ico`
 						);
 						const ico = new IconIco();
-						const png = await readFile(specIconFilePng(name, size));
+						const png = new Uint8Array(
+							await readFile(specIconFilePng(name, size))
+						);
 						ico.addFromPng(png, true, true);
 						const data = Buffer.from(ico.encode());
 						await mkdir(dirname(dest), {recursive: true});

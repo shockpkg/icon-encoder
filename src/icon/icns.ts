@@ -89,7 +89,7 @@ export class IconIcns extends Icon {
 	 * @param raw Use raw PNG data without re-encoding for the PNG types.
 	 */
 	public addFromPng(
-		data: Readonly<Buffer>,
+		data: Readonly<Uint8Array>,
 		types: readonly string[],
 		raw = false
 	) {
