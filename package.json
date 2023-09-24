@@ -54,7 +54,7 @@
 	"copyright": "Copyright (c) 2019-2023 JrMasterModelBuilder",
 	"license": "MPL-2.0",
 	"dependencies": {
-		"upng-js": "^2.1.0"
+		"pngjs": "^7.0.0"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.22.15",
@@ -62,7 +62,7 @@
 		"@babel/preset-env": "^7.22.20",
 		"@babel/preset-typescript": "^7.22.15",
 		"@types/node": "^20.6.4",
-		"@types/upng-js": "^2.1.3",
+		"@types/pngjs": "^6.0.2",
 		"@typescript-eslint/eslint-plugin": "^6.7.2",
 		"@typescript-eslint/parser": "^6.7.2",
 		"babel-plugin-esm-resolver": "^2.3.1",

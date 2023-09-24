@@ -1,4 +1,4 @@
-import UPNG from 'upng-js';
+import {PNG} from 'pngjs';
 
 import {IImageData} from './types';
 
@@ -18,11 +18,17 @@ export abstract class Icon {
 	 * @returns Image data.
 	 */
 	protected _decodePngToRgba(data: Readonly<Uint8Array>) {
-		const image = UPNG.decode(data);
+		const {
+			width,
+			height,
+			data: d
+		} = PNG.sync.read(
+			Buffer.from(data.buffer, data.byteOffset, data.byteLength)
+		);
 		return {
-			width: image.width,
-			height: image.height,
-			data: new Uint8Array(UPNG.toRGBA8(image)[0])
+			width,
+			height,
+			data: new Uint8Array(d.buffer, d.byteOffset, d.byteLength)
 		} as IImageData;
 	}
 
@@ -33,25 +39,15 @@ export abstract class Icon {
 	 * @returns PNG data.
 	 */
 	protected _encodeRgbaToPng(imageData: Readonly<IImageData>) {
-		return new Uint8Array(
-			(
-				UPNG.encode as (
-					imgs: ArrayBuffer[],
-					w: number,
-					h: number,
-					cnum: number,
-					dels?: number[],
-					forbidPlte?: boolean
-				) => ArrayBuffer
-			)(
-				[imageData.data.buffer],
-				imageData.width,
-				imageData.height,
-				0,
-				[],
-				true
-			)
-		);
+		const {width, height, data} = imageData;
+		const png = new PNG({width, height});
+		png.data = Buffer.from(data.buffer, data.byteOffset, data.byteLength);
+		const d = PNG.sync.write(png, {
+			deflateLevel: 9,
+			deflateStrategy: 1,
+			deflateChunkSize: 32 * 1024
+		});
+		return new Uint8Array(d.buffer, d.byteOffset, d.byteLength);
 	}
 
 	/**
