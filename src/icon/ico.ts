@@ -1,6 +1,6 @@
 import {IImageData} from '../types';
 import {Icon} from '../icon';
-import {pngIhdr} from '../util';
+import {concatUint8Arrays, pngIhdr} from '../util';
 
 /**
  * Icon entry.
@@ -105,8 +105,7 @@ export class IconIco extends Icon {
 		const dir = this._encodeIcoDir(entries.length);
 		const dirs: Buffer[] = [];
 		const imgs: Buffer[] = [];
-		let size = dir.length;
-		let offset = size + entries.length * 16;
+		let offset = dir.length + entries.length * 16;
 		for (const entry of entries) {
 			const {data} = entry;
 			const dataSize = data.length;
@@ -114,9 +113,8 @@ export class IconIco extends Icon {
 			dirs.push(ent);
 			imgs.push(data as Buffer);
 			offset += dataSize;
-			size += dataSize + ent.length;
 		}
-		return Buffer.concat([dir, ...dirs, ...imgs], size);
+		return concatUint8Arrays([dir, ...dirs, ...imgs]);
 	}
 
 	/**
@@ -138,11 +136,12 @@ export class IconIco extends Icon {
 	 */
 	protected _encodeIcoDir(count: number) {
 		// Structure: ICONDIR.
-		const encoded = Buffer.alloc(6);
-		encoded.writeUInt16LE(0, 0);
-		encoded.writeUInt16LE(1, 2);
-		encoded.writeUInt16LE(count, 4);
-		return encoded;
+		const r = new Uint8Array(6);
+		const encoded = new DataView(r.buffer, r.byteOffset, r.byteLength);
+		encoded.setUint16(0, 0, true);
+		encoded.setUint16(2, 1, true);
+		encoded.setUint16(4, count, true);
+		return Buffer.from(r);
 	}
 
 	/**
@@ -158,16 +157,17 @@ export class IconIco extends Icon {
 	) {
 		// Structure: ICONDIRENTRY.
 		const {width, height, data} = entry;
-		const encoded = Buffer.alloc(16);
-		encoded.writeUInt8(width >= 256 ? 0 : width, 0);
-		encoded.writeUInt8(height >= 256 ? 0 : height, 1);
-		encoded.writeUInt8(0, 2);
-		encoded.writeUInt8(0, 3);
-		encoded.writeUInt16LE(1, 4);
-		encoded.writeUInt16LE(32, 6);
-		encoded.writeUInt32LE(data.length, 8);
-		encoded.writeUInt32LE(offset, 12);
-		return encoded;
+		const r = new Uint8Array(16);
+		const encoded = new DataView(r.buffer, r.byteOffset, r.byteLength);
+		encoded.setUint8(0, width >= 256 ? 0 : width);
+		encoded.setUint8(1, height >= 256 ? 0 : height);
+		encoded.setUint8(2, 0);
+		encoded.setUint8(3, 0);
+		encoded.setUint16(4, 1, true);
+		encoded.setUint16(6, 32, true);
+		encoded.setUint32(8, data.length, true);
+		encoded.setUint32(12, offset, true);
+		return Buffer.from(r);
 	}
 
 	/**
