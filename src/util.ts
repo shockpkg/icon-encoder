@@ -1,7 +1,36 @@
 import {IPngIhdr} from './types';
 
 const PNG_MAGIC = [137, 80, 78, 71, 13, 10, 26, 10];
-const PNG_IDHR = 0x49484452;
+const PNG_MAGIC_SIZE = 8;
+
+const CRC32_TABLE: number[] = [];
+
+/**
+ * Hash data with CRC32.
+ *
+ * @param data Data to be hashed.
+ * @returns Data hash.
+ */
+export function crc32(data: Readonly<Uint8Array>) {
+	if (!CRC32_TABLE.length) {
+		for (let i = 256; i--; ) {
+			let c = i;
+			for (let j = 0; j < 8; j++) {
+				// eslint-disable-next-line no-bitwise
+				c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+			}
+			CRC32_TABLE[i] = c;
+		}
+	}
+	let r = -1;
+	const l = data.length;
+	for (let i = 0; i < l; ) {
+		// eslint-disable-next-line no-bitwise
+		r = CRC32_TABLE[(r ^ data[i++]) & 0xff] ^ (r >>> 8);
+	}
+	// eslint-disable-next-line no-bitwise
+	return r ^ -1;
+}
 
 /**
  * Concatenate multiple Uint8Array together.
@@ -31,7 +60,7 @@ export function concatUint8Arrays(arrays: Readonly<Readonly<Uint8Array>[]>) {
  */
 export function* pngReader(data: Readonly<Uint8Array>) {
 	let i = 0;
-	for (; i < 8; i++) {
+	for (; i < PNG_MAGIC_SIZE; i++) {
 		if (data[i] !== PNG_MAGIC[i]) {
 			throw new Error('Invalid PNG header signature');
 		}
@@ -52,6 +81,36 @@ export function* pngReader(data: Readonly<Uint8Array>) {
 }
 
 /**
+ * Encode PNG from tags.
+ *
+ * @param tags PNG tags and data.
+ * @returns PNG data.
+ */
+export function pngEncode(tags: Readonly<[number, Readonly<Uint8Array>][]>) {
+	let total = PNG_MAGIC_SIZE;
+	for (const [, data] of tags) {
+		total += 12 + data.length;
+	}
+	const r = new Uint8Array(total);
+	const d = new DataView(r.buffer, r.byteOffset, r.byteLength);
+	r.set(PNG_MAGIC);
+	let i = PNG_MAGIC_SIZE;
+	for (const [tag, data] of tags) {
+		const l = data.length;
+		d.setUint32(i, l, false);
+		i += 4;
+		const f = i;
+		d.setUint32(i, tag, false);
+		i += 4;
+		r.set(data, i);
+		i += l;
+		d.setUint32(i, crc32(r.subarray(f, i)), false);
+		i += 4;
+	}
+	return r;
+}
+
+/**
  * Read PNG IHDR data.
  *
  * @param data PNG data.
@@ -59,7 +118,7 @@ export function* pngReader(data: Readonly<Uint8Array>) {
  */
 export function pngIhdr(data: Readonly<Uint8Array>): IPngIhdr {
 	for (const [tag, td] of pngReader(data)) {
-		if (tag === PNG_IDHR) {
+		if (tag === 0x49484452) {
 			const d = new DataView(td.buffer, td.byteOffset, td.byteLength);
 			return {
 				width: d.getUint32(0, false),

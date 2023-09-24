@@ -236,7 +236,7 @@ export class IconIcns extends Icon {
 		imageData: Readonly<IImageData>,
 		_type: string
 	) {
-		return this._encodeRgbaToPng(imageData);
+		return this._encodeRgbaToPng(imageData, 0);
 	}
 
 	/**

@@ -90,7 +90,7 @@ export class IconIco extends Icon {
 			width: imageData.width,
 			height: imageData.height,
 			data: isPng
-				? await this._encodeRgbaToPng(imageData)
+				? await this._encodeRgbaToPng(imageData, 0)
 				: this._encodeRgbaToBmp(imageData)
 		});
 	}
