@@ -1,6 +1,7 @@
 import {IPngIhdr} from './types';
 
 const PNG_MAGIC = [137, 80, 78, 71, 13, 10, 26, 10];
+const PNG_IDHR = 0x49484452;
 
 /**
  * Concatenate multiple Uint8Array together.
@@ -23,12 +24,12 @@ export function concatUint8Arrays(arrays: Readonly<Readonly<Uint8Array>[]>) {
 }
 
 /**
- * Read PNG IHDR data.
+ * Read PNG file tags.
  *
  * @param data PNG data.
- * @returns PNG IHDR.
+ * @yields PNG tags.
  */
-export function pngIhdr(data: Readonly<Uint8Array>): IPngIhdr {
+export function* pngReader(data: Readonly<Uint8Array>) {
 	let i = 0;
 	for (; i < 8; i++) {
 		if (data[i] !== PNG_MAGIC[i]) {
@@ -36,17 +37,27 @@ export function pngIhdr(data: Readonly<Uint8Array>): IPngIhdr {
 		}
 	}
 
-	// Seek out IHDR tag, which should be first (spec requires, some ignore).
 	const dv = new DataView(data.buffer, data.byteOffset, data.byteLength);
 	while (i < data.length) {
 		const size = dv.getUint32(i, false);
 		i += 4;
-		const na = data[i++];
-		const nb = data[i++];
-		const nc = data[i++];
-		const nd = data[i++];
-		if (na === 73 && nb === 72 && nc === 68 && nd === 82) {
-			const d = new DataView(dv.buffer, dv.byteOffset + i, size);
+		const tag = dv.getUint32(i, false);
+		i += 4;
+		yield [tag, data.subarray(i, i + size)] as [number, Uint8Array];
+		i += size;
+	}
+}
+
+/**
+ * Read PNG IHDR data.
+ *
+ * @param data PNG data.
+ * @returns PNG IHDR.
+ */
+export function pngIhdr(data: Readonly<Uint8Array>): IPngIhdr {
+	for (const [tag, td] of pngReader(data)) {
+		if (tag === PNG_IDHR) {
+			const d = new DataView(td.buffer, td.byteOffset, td.byteLength);
 			return {
 				width: d.getUint32(0, false),
 				height: d.getUint32(4, false),
@@ -57,9 +68,7 @@ export function pngIhdr(data: Readonly<Uint8Array>): IPngIhdr {
 				interlacemethod: d.getUint8(12)
 			};
 		}
-		i += size;
 	}
-
 	throw new Error('Missing PNG IHDR tag');
 }
 
