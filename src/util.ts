@@ -43,8 +43,11 @@ export function* pngReader(data: Readonly<Uint8Array>) {
 		i += 4;
 		const tag = dv.getUint32(i, false);
 		i += 4;
-		yield [tag, data.subarray(i, i + size)] as [number, Uint8Array];
+		const d = data.subarray(i, i + size);
 		i += size;
+		const crc = dv.getUint32(i, false);
+		yield [tag, d, crc] as [number, Uint8Array, number];
+		i += 4;
 	}
 }
 
