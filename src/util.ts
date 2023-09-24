@@ -6,7 +6,7 @@ import {IPngIhdr} from './types';
  * @param arrays Uint8Array arrays.
  * @returns Uint8Array array.
  */
-export function concatUint8Arrays(arrays: Readonly<Uint8Array>[]) {
+export function concatUint8Arrays(arrays: Readonly<Readonly<Uint8Array>[]>) {
 	let l = 0;
 	for (const a of arrays) {
 		l += a.length;
