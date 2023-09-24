@@ -135,8 +135,8 @@ export class IconIcns extends Icon {
 		const {toc} = this;
 		const headName = new Uint8Array([105, 99, 110, 115]);
 		const headSize = new Uint8Array(4);
-		let size = 8;
-		let tocSizeValue = 8;
+		let sized = 8;
+		let tocSized = 8;
 		const tocs = toc
 			? [new Uint8Array([84, 79, 67, 32]), new Uint8Array(4)]
 			: null;
@@ -147,19 +147,19 @@ export class IconIcns extends Icon {
 				imgName[i] = type.charCodeAt(i) || 0;
 			}
 			const imgSize = new Uint8Array(4);
-			const imgSizeValue = data.length + 8;
+			const imgSized = data.length + 8;
 			new DataView(
 				imgSize.buffer,
 				imgSize.byteOffset,
 				imgSize.byteLength
-			).setUint32(0, imgSizeValue, false);
+			).setUint32(0, imgSized, false);
 			if (tocs) {
 				tocs.push(imgName, imgSize);
-				tocSizeValue += 8;
-				size += 8;
+				tocSized += 8;
+				sized += 8;
 			}
 			imgs.push(imgName, imgSize, data);
-			size += imgSizeValue;
+			sized += imgSized;
 		}
 		if (tocs) {
 			const [, tocSize] = tocs;
@@ -167,14 +167,14 @@ export class IconIcns extends Icon {
 				tocSize.buffer,
 				tocSize.byteOffset,
 				tocSize.byteLength
-			).setUint32(0, tocSizeValue, false);
-			size += 8;
+			).setUint32(0, tocSized, false);
+			sized += 8;
 		}
 		new DataView(
 			headSize.buffer,
 			headSize.byteOffset,
 			headSize.byteLength
-		).setUint32(0, size, false);
+		).setUint32(0, sized, false);
 		return concatUint8Arrays([
 			headName,
 			headSize,
