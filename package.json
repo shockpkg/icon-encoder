@@ -54,7 +54,6 @@
 	"copyright": "Copyright (c) 2019-2023 JrMasterModelBuilder",
 	"license": "MPL-2.0",
 	"dependencies": {
-		"@fiahfy/packbits": "0.0.6",
 		"upng-js": "^2.1.0"
 	},
 	"devDependencies": {

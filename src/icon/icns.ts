@@ -1,8 +1,6 @@
-import {encode as packbitsEncode} from '@fiahfy/packbits';
-
 import {IImageData} from '../types';
 import {Icon} from '../icon';
-import {concatUint8Arrays} from '../util';
+import {concatUint8Arrays, packBitsIcns} from '../util';
 
 const typeArgb = ['ic04', 'ic05'];
 
@@ -343,12 +341,6 @@ export class IconIcns extends Icon {
 	 * @returns Compressed data.
 	 */
 	protected _encodePackBitsIcns(data: Readonly<Uint8Array>) {
-		const b = packbitsEncode(
-			Buffer.from(data.buffer, data.byteOffset, data.byteLength),
-			{
-				format: 'icns'
-			}
-		);
-		return new Uint8Array(b.buffer, b.byteOffset, b.byteLength);
+		return packBitsIcns(data);
 	}
 }
