@@ -69,7 +69,7 @@ export abstract class Icon {
 			png.on('end', resolve);
 			png.pack();
 		});
-		return pngRepack(concatUint8Arrays(packed));
+		return pngRepack(concatUint8Arrays(packed), srgb);
 	}
 
 	/**
