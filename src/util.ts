@@ -2,6 +2,10 @@ import {IPngIhdr} from './types';
 
 const PNG_MAGIC = [137, 80, 78, 71, 13, 10, 26, 10];
 const PNG_MAGIC_SIZE = 8;
+const IHDR = 0x49484452;
+const SRGB = 0x73524742;
+const IDAT = 0x49444154;
+const IEND = 0x49454e44;
 
 const CRC32_TABLE: number[] = [];
 
@@ -111,6 +115,50 @@ export function pngEncode(tags: Readonly<[number, Readonly<Uint8Array>][]>) {
 }
 
 /**
+ * Repack PNG tag data with a single IDAT.
+ *
+ * @param data PNG data.
+ * @param srgb Set an SRGB value.
+ * @returns PNG data.
+ */
+export function pngRepack(
+	data: Readonly<Uint8Array>,
+	srgb: number | null = null
+) {
+	let ihdr: Uint8Array | null = null;
+	let iend: Uint8Array | null = null;
+	const idats = [];
+	for (const [tag, d] of pngReader(data)) {
+		switch (tag) {
+			case IDAT: {
+				idats.push(d);
+				break;
+			}
+			case IHDR: {
+				ihdr = d;
+				break;
+			}
+			case IEND: {
+				iend = d;
+				break;
+			}
+			default: {
+				// Discard others.
+			}
+		}
+	}
+	if (!ihdr || !iend) {
+		throw new Error('Invalid PNG');
+	}
+	const pieces: [number, Uint8Array][] = [[IHDR, ihdr]];
+	if (srgb !== null) {
+		pieces.push([SRGB, new Uint8Array([srgb])]);
+	}
+	pieces.push([IDAT, concatUint8Arrays(idats)], [IEND, iend]);
+	return pngEncode(pieces);
+}
+
+/**
  * Read PNG IHDR data.
  *
  * @param data PNG data.
@@ -118,7 +166,7 @@ export function pngEncode(tags: Readonly<[number, Readonly<Uint8Array>][]>) {
  */
 export function pngIhdr(data: Readonly<Uint8Array>): IPngIhdr {
 	for (const [tag, td] of pngReader(data)) {
-		if (tag === 0x49484452) {
+		if (tag === IHDR) {
 			const d = new DataView(td.buffer, td.byteOffset, td.byteLength);
 			return {
 				width: d.getUint32(0, false),
