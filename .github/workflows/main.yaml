@@ -15,7 +15,7 @@ jobs:
             CODE_CHECK: 1
 
           - runs-on: ubuntu-latest
-            node-version: '20.7.0'
+            node-version: '20.8.0'
 
     runs-on: ${{ matrix.config.runs-on }}
 
