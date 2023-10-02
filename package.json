@@ -9,7 +9,8 @@
 		"ico",
 		"icns",
 		"windows",
-		"mac"
+		"mac",
+		"macos"
 	],
 	"main": "cjs/index",
 	"exports": {
