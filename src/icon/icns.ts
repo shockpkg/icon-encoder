@@ -26,7 +26,6 @@ const typeMask8Bit = ['s8mk', 'l8mk', 'h8mk', 't8mk'];
  * Icon entry.
  */
 export interface IIconIcnsEntry {
-	//
 	/**
 	 * Icon type.
 	 */

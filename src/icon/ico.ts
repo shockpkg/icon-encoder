@@ -6,7 +6,6 @@ import {concatUint8Arrays, pngIhdr} from '../util';
  * Icon entry.
  */
 export interface IIconIcoEntry {
-	//
 	/**
 	 * Icon width.
 	 */
