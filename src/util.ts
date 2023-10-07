@@ -64,7 +64,7 @@ export function concatUint8Arrays(arrays: Readonly<Readonly<Uint8Array>[]>) {
  * @param data PNG data.
  * @returns Image data.
  */
-export async function encodePngToRgba(data: Readonly<Uint8Array>) {
+export async function decodePngToRgba(data: Readonly<Uint8Array>) {
 	const png = new PNG();
 	await new Promise((resolve, reject) => {
 		png.parse(

@@ -1,5 +1,5 @@
 import {IImageData} from './types';
-import {encodePngToRgba, encodeRgbaToPng} from './util';
+import {decodePngToRgba, encodeRgbaToPng} from './util';
 
 /**
  * Icon object.
@@ -17,7 +17,7 @@ export abstract class Icon {
 	 * @returns Image data.
 	 */
 	protected async _decodePngToRgba(data: Readonly<Uint8Array>) {
-		return encodePngToRgba(data);
+		return decodePngToRgba(data);
 	}
 
 	/**
