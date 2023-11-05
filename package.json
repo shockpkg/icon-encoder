@@ -1,7 +1,7 @@
 {
 	"name": "@shockpkg/icon-encoder",
 	"description": "Package for encoding different icon files",
-	"version": "3.1.1",
+	"version": "3.1.2",
 	"keywords": [
 		"shockpkg",
 		"icon",
