@@ -127,6 +127,19 @@ export class IconIcns extends Icon {
 	}
 
 	/**
+	 * Add raw data chunk.
+	 *
+	 * @param data Chunk data.
+	 * @param type Chunk tag.
+	 */
+	public addRaw(data: Readonly<Uint8Array>, type: string) {
+		this.entries.push({
+			type,
+			data: new Uint8Array(data)
+		});
+	}
+
+	/**
 	 * Encode icon.
 	 *
 	 * @returns Encoded icon.
