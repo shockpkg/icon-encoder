@@ -117,7 +117,7 @@ await icns.addFromPng(await readFile('light/32x32.png'), ['ic05']);
 await icns.addFromPng(await readFile('light/512x512@2x.png'), ['ic10']);
 await icns.addFromPng(await readFile('light/16x16@2x.png'), ['ic11']);
 
-// Create and embed the dark variant.
+// Create and embed the dark version.
 const dark = new IconIcns();
 dark.toc = icns.toc;
 await dark.addFromPng(await readFile('dark/32x32@2x.png'), ['ic12']);
