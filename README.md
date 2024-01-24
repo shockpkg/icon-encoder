@@ -93,6 +93,46 @@ await icns.addFromPng(await readFile('icon/16x16@2x.png'), ['ic11'], raw);
 await writeFile('icon.icns', icns.encode());
 ```
 
+### macOS ICNS with dark mode (current formats)
+
+```js
+import {readFile, writeFile} from 'node:fs/promises';
+import {IconIcns} from '@shockpkg/icon-encoder';
+
+const icns = new IconIcns();
+icns.toc = true;
+
+// First insert light images.
+await icns.addFromPng(await readFile('light/32x32@2x.png'), ['ic12']);
+await icns.addFromPng(await readFile('light/128x128.png'), ['ic07']);
+await icns.addFromPng(await readFile('light/128x128@2x.png'), ['ic13']);
+await icns.addFromPng(await readFile('light/256x256.png'), ['ic08']);
+await icns.addFromPng(await readFile('light/16x16.png'), ['ic04']);
+await icns.addFromPng(await readFile('light/256x256@2x.png'), ['ic14']);
+await icns.addFromPng(await readFile('light/512x512.png'), ['ic09']);
+await icns.addFromPng(await readFile('light/32x32.png'), ['ic05']);
+await icns.addFromPng(await readFile('light/512x512@2x.png'), ['ic10']);
+await icns.addFromPng(await readFile('light/16x16@2x.png'), ['ic11']);
+
+// Create and embed the dark variant.
+const dark = new IconIcns();
+dark.toc = icns.toc;
+await dark.addFromPng(await readFile('dark/32x32@2x.png'), ['ic12']);
+await dark.addFromPng(await readFile('dark/128x128.png'), ['ic07']);
+await dark.addFromPng(await readFile('dark/128x128@2x.png'), ['ic13']);
+await dark.addFromPng(await readFile('dark/256x256.png'), ['ic08']);
+await dark.addFromPng(await readFile('dark/16x16.png'), ['ic04']);
+await dark.addFromPng(await readFile('dark/256x256@2x.png'), ['ic14']);
+await dark.addFromPng(await readFile('dark/512x512.png'), ['ic09']);
+await dark.addFromPng(await readFile('dark/32x32.png'), ['ic05']);
+await dark.addFromPng(await readFile('dark/512x512@2x.png'), ['ic10']);
+await dark.addFromPng(await readFile('dark/16x16@2x.png'), ['ic11']);
+icns.addDarkIcns(dark.encode());
+
+// Write the icon with the dark icon embeded.
+await writeFile('icon.icns', icns.encode());
+```
+
 ### macOS ICNS (legacy formats)
 
 ```js
