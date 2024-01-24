@@ -96,7 +96,7 @@ await writeFile('icon.icns', icns.encode());
 
 ### macOS ICNS with dark mode embedded (current formats)
 
-Since macOS 10.14 an ICNS icon can contain an embedded dark version which can be shown automatically in dark mode.
+Since macOS 10.14 an ICNS can contain an embedded dark version for use in dark mode.
 
 ```js
 import {readFile, writeFile} from 'node:fs/promises';
