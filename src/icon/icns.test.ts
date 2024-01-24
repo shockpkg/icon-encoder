@@ -1,8 +1,13 @@
 import {describe, it} from 'node:test';
-import {mkdir, readFile, writeFile} from 'node:fs/promises';
+import {copyFile, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
 import {dirname} from 'node:path';
 
-import {specIconsPng, specIconFilePng, encodeFile} from '../util.spec';
+import {
+	specIconsPng,
+	specIconFilePng,
+	encodeFile,
+	fixtureFile
+} from '../util.spec';
 
 import {IconIcns} from './icns';
 
@@ -96,5 +101,53 @@ void describe('icon/icns', () => {
 				}
 			});
 		}
+
+		void describe('darkmode', () => {
+			void it('alphas', async () => {
+				const icns = new IconIcns();
+				icns.toc = true;
+				for (const [, size, types] of sizesCurrent) {
+					// eslint-disable-next-line no-await-in-loop
+					const png = await readFile(
+						specIconFilePng('alphagradientcolor', size)
+					);
+					// eslint-disable-next-line no-await-in-loop
+					await icns.addFromPng(png, types);
+				}
+
+				{
+					const dark = new IconIcns();
+					dark.toc = true;
+					for (const [, size, types] of sizesCurrent) {
+						// eslint-disable-next-line no-await-in-loop
+						const png = await readFile(
+							specIconFilePng('alphagradientgrey', size)
+						);
+						// eslint-disable-next-line no-await-in-loop
+						await dark.addFromPng(png, types);
+					}
+					icns.addDarkIcns(dark.encode());
+				}
+
+				const data = icns.encode();
+
+				const base = ['icns', 'darkmode', 'test.app'];
+				const cnts = [...base, 'Contents'];
+				const app = encodeFile(...base);
+				const bin = encodeFile(...cnts, 'MacOS', 'test');
+				const icon = encodeFile(...cnts, 'Resources', 'test.icns');
+				const plist = encodeFile(...cnts, 'Info.plist');
+
+				await rm(app, {recursive: true, force: true});
+
+				await mkdir(dirname(bin), {recursive: true});
+				await copyFile(fixtureFile('darkmode', 'test'), bin);
+
+				await mkdir(dirname(icon), {recursive: true});
+				await writeFile(icon, data);
+
+				await copyFile(fixtureFile('darkmode', 'Info.plist'), plist);
+			});
+		});
 	});
 });

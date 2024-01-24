@@ -140,6 +140,35 @@ export class IconIcns extends Icon {
 	}
 
 	/**
+	 * Add dark mode icns.
+	 *
+	 * @param data Full encoded icns data.
+	 */
+	public addDarkIcns(data: Readonly<Uint8Array>) {
+		const {length} = data;
+		if (
+			length < 8 ||
+			data[0] !== 105 ||
+			data[1] !== 99 ||
+			data[2] !== 110 ||
+			data[3] !== 115 ||
+			new DataView(
+				data.buffer,
+				data.byteOffset,
+				data.byteLength
+			).getUint32(4) !== length
+		) {
+			throw new Error('Invalid icns header data');
+		}
+		const body = new Uint8Array(length - 8);
+		body.set(data.subarray(8));
+		this.entries.push({
+			type: '\xFD\xD9\x2F\xA8',
+			data: body
+		});
+	}
+
+	/**
 	 * Encode icon.
 	 *
 	 * @returns Encoded icon.
