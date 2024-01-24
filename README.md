@@ -94,7 +94,9 @@ await icns.addFromPng(await readFile('icon/16x16@2x.png'), ['ic11'], raw);
 await writeFile('icon.icns', icns.encode());
 ```
 
-### macOS ICNS with dark mode (current formats)
+### macOS ICNS with dark mode embedded (current formats)
+
+Since macOS 10.14 an ICNS icon can contain an embedded dark version which can be shown automatically in dark mode.
 
 ```js
 import {readFile, writeFile} from 'node:fs/promises';
@@ -130,7 +132,7 @@ await dark.addFromPng(await readFile('dark/512x512@2x.png'), ['ic10']);
 await dark.addFromPng(await readFile('dark/16x16@2x.png'), ['ic11']);
 icns.addDarkIcns(dark.encode());
 
-// Write the icon with the dark icon embeded.
+// Write the icon with the dark icon embedded.
 await writeFile('icon.icns', icns.encode());
 ```
 
