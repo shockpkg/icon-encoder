@@ -17,11 +17,12 @@ function help(script) {
 		'  --raw               Prefer raw png data in icon.',
 		'  --png               Prefer png encoding in ico.',
 		'  --bmp               Prefer bmp encoding in ico.',
-		'  --toc               Include TOC entry in icns.'
+		'  --toc               Include TOC entry in icns.',
+		'  --dark <file>       Embed dark mode icns in icns.'
 	].join('\n');
 }
 
-async function createIcns(pngs, toc, raw) {
+async function createIcns(pngs, toc, raw, dark) {
 	const icon = new IconIcns();
 	icon.toc = toc;
 	const types = {
@@ -45,15 +46,26 @@ async function createIcns(pngs, toc, raw) {
 		}
 		read.push([f, types[size]]);
 	}
+	if (dark !== null) {
+		read.push([dark, null]);
+	}
 	try {
-		await Promise.all(read.map(async a => a.push(await readFile(a[0]))));
+		await Promise.all(
+			read.map(async a => {
+				a.push(await readFile(a[0]));
+			})
+		);
 	} catch (err) {
 		return [err.message, null];
 	}
 	for (const [file, type, data] of read) {
 		try {
-			// eslint-disable-next-line no-await-in-loop
-			await icon.addFromPng(data, [type], raw);
+			if (type === null) {
+				icon.addDarkIcns(data);
+			} else {
+				// eslint-disable-next-line no-await-in-loop
+				await icon.addFromPng(data, [type], raw);
+			}
 		} catch (err) {
 			return [`${file}: ${err.message}`, null];
 		}
@@ -90,20 +102,45 @@ function argparse(args) {
 		'--raw': false,
 		'--png': false,
 		'--bmp': false,
-		'--toc': false
+		'--toc': false,
+		'--dark': null
 	};
 	let error = null;
+	let switching = null;
 	const positional = [];
 	for (const a of args) {
-		if (!switches['--'] && a.startsWith('-')) {
-			if (a in switches) {
-				switches[a] = true;
+		if (switching) {
+			switches[switching] = a;
+			switching = null;
+			continue;
+		}
+		if (switches['--']) {
+			positional.push(a);
+			continue;
+		}
+		if (a.startsWith('-')) {
+			const e = a.indexOf('=');
+			if (e > 0) {
+				const p = a.substring(0, e);
+				if (p in switches && typeof switches[p] !== 'boolean') {
+					switches[p] = a.substring(e + 1);
+					continue;
+				}
+			} else if (a in switches) {
+				if (typeof switches[a] === 'boolean') {
+					switches[a] = true;
+				} else {
+					switching = a;
+				}
 				continue;
 			}
 			error = `Unknown option: ${a}`;
 			break;
 		}
 		positional.push(a);
+	}
+	if (switching) {
+		throw new Error(`Missing option parameter: ${switching}`);
 	}
 	return [error, {switches, positional}];
 }
@@ -142,7 +179,12 @@ async function main(argv) {
 				switches['--png'] || (switches['--bmp'] ? false : null),
 				switches['--raw']
 		  )
-		: createIcns(pngs, switches['--toc'], switches['--raw']));
+		: createIcns(
+				pngs,
+				switches['--toc'],
+				switches['--raw'],
+				switches['--dark']
+		  ));
 	if (err) {
 		console.error(err);
 		return 1;
