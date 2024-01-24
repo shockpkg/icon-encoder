@@ -59,7 +59,7 @@
 	"repository": "https://github.com/shockpkg/icon-encoder.git",
 	"bugs": "https://github.com/shockpkg/icon-encoder/issues",
 	"author": "JrMasterModelBuilder",
-	"copyright": "Copyright (c) 2019-2023 JrMasterModelBuilder",
+	"copyright": "Copyright (c) 2019-2024 JrMasterModelBuilder",
 	"license": "MPL-2.0",
 	"dependencies": {
 		"pngjs": "^7.0.0"
