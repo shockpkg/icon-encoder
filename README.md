@@ -34,6 +34,7 @@ Usage: shockpkg-icon-encoder [options...] (icon.ico | icon.icns) pngs...
   --png               Prefer png encoding in ico.
   --bmp               Prefer bmp encoding in ico.
   --toc               Include TOC entry in icns.
+  --dark <file>       Embed dark mode icns in icns.
 ```
 
 ## API Usage
