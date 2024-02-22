@@ -18,22 +18,26 @@ jobs:
             CODE_TEST: 'test-legacy'
 
           - runs-on: ubuntu-latest
-            node-version: '20.9.0' # LTS (current)
+            node-version: '20.9.0' # LTS
+            CODE_TEST: 'test-legacy'
+
+          - runs-on: ubuntu-latest
+            node-version: '20.11.1' # LTS (current)
             CODE_TEST: 'test-legacy'
             CODE_CHECK: 1
 
           - runs-on: ubuntu-latest
-            node-version: '21.1.0' # Latest
+            node-version: '21.6.2' # Latest
             CODE_TEST: 'test'
 
     runs-on: ${{ matrix.config.runs-on }}
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.config.node-version }}
 
@@ -65,12 +69,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.9.0'
+          node-version: '20.11.1'
           registry-url: https://registry.npmjs.org/
 
       - name: Dependencies
