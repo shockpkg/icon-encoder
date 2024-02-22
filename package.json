@@ -34,7 +34,7 @@
 		"node": ">=18.12.0"
 	},
 	"scripts": {
-		"clean": "rimraf *.log* dts esm cjs spec/encodes",
+		"clean": "rimraf dts esm cjs spec/encodes",
 		"lint": "eslint .",
 		"format": "prettier -w .",
 		"formatted": "prettier -c .",
