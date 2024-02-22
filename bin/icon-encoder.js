@@ -178,13 +178,13 @@ async function main(argv) {
 				pngs,
 				switches['--png'] || (switches['--bmp'] ? false : null),
 				switches['--raw']
-		  )
+			)
 		: createIcns(
 				pngs,
 				switches['--toc'],
 				switches['--raw'],
 				switches['--dark']
-		  ));
+			));
 	if (err) {
 		console.error(err);
 		return 1;
