@@ -7,9 +7,9 @@ import {
 	specIconFilePng,
 	encodeFile,
 	fixtureFile
-} from '../util.spec';
+} from '../util.spec.ts';
 
-import {IconIcns} from './icns';
+import {IconIcns} from './icns.ts';
 
 // NOTE:
 // The types ic04 and ic05 may not display individually in Finder and Preview.

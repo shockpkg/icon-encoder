@@ -2,8 +2,8 @@ import {describe, it} from 'node:test';
 import {strictEqual} from 'node:assert';
 import {readFile} from 'node:fs/promises';
 
-import {pngIhdr} from './util';
-import {genPngFiles, specIconFilePng} from './util.spec';
+import {pngIhdr} from './util.ts';
+import {genPngFiles, specIconFilePng} from './util.spec.ts';
 
 void describe('util', () => {
 	void describe('pngIhdr', () => {

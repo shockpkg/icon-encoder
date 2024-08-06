@@ -1,6 +1,6 @@
 import {PNG} from 'pngjs';
 
-import {IImageData, IPngIhdr} from './types';
+import {IImageData, IPngIhdr} from './types.ts';
 
 const PNG_MAGIC = [137, 80, 78, 71, 13, 10, 26, 10];
 const PNG_MAGIC_SIZE = 8;

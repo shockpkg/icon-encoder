@@ -1,6 +1,6 @@
-import {IImageData} from '../types';
-import {Icon} from '../icon';
-import {concatUint8Arrays, pngIhdr} from '../util';
+import {IImageData} from '../types.ts';
+import {Icon} from '../icon.ts';
+import {concatUint8Arrays, pngIhdr} from '../util.ts';
 
 /**
  * Icon entry.

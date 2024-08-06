@@ -1,2 +1,2 @@
-export * from './icns';
-export * from './ico';
+export * from './icns.ts';
+export * from './ico.ts';

@@ -1,5 +1,5 @@
-import {IImageData} from './types';
-import {decodePngToRgba, encodeRgbaToPng} from './util';
+import {IImageData} from './types.ts';
+import {decodePngToRgba, encodeRgbaToPng} from './util.ts';
 
 /**
  * Icon object.

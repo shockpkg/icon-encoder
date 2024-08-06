@@ -73,7 +73,7 @@
 		"@stylistic/eslint-plugin": "^2.6.1",
 		"@types/node": "^22.1.0",
 		"@types/pngjs": "^6.0.5",
-		"babel-plugin-esm-resolver": "^3.0.0",
+		"babel-plugin-module-replace": "^1.0.1",
 		"babel-plugin-search-and-replace": "^1.1.1",
 		"eslint": "^9.8.0",
 		"eslint-config-prettier": "^9.1.0",

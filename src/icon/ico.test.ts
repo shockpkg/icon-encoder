@@ -2,9 +2,9 @@ import {describe, it} from 'node:test';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import {dirname} from 'node:path';
 
-import {specIconsPng, specIconFilePng, encodeFile} from '../util.spec';
+import {specIconsPng, specIconFilePng, encodeFile} from '../util.spec.ts';
 
-import {IconIco} from './ico';
+import {IconIco} from './ico.ts';
 
 const sizes = [256, 128, 64, 48, 32, 16];
 
