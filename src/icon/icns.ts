@@ -186,6 +186,7 @@ export class IconIcns extends Icon {
 		for (const {type, data} of this.entries) {
 			const imgName = new Uint8Array(4);
 			for (let i = 0; i < 4; i++) {
+				// eslint-disable-next-line unicorn/prefer-code-point
 				imgName[i] = type.charCodeAt(i) || 0;
 			}
 			const imgSize = new Uint8Array(4);

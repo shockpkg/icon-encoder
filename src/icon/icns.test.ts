@@ -53,7 +53,6 @@ function* genTests() {
 void describe('icon/icns', () => {
 	void describe('IconIcns', () => {
 		for (const {name, version, sizes} of genTests()) {
-			// eslint-disable-next-line no-loop-func
 			void describe(name, () => {
 				for (const toc of [false, true]) {
 					const suffix = toc ? '-toc' : '';

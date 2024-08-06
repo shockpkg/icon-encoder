@@ -44,7 +44,7 @@ export function crc32(data: Readonly<Uint8Array>) {
  * @param arrays Uint8Array arrays.
  * @returns Uint8Array array.
  */
-export function concatUint8Arrays(arrays: Readonly<Readonly<Uint8Array>[]>) {
+export function concatUint8Arrays(arrays: readonly Readonly<Uint8Array>[]) {
 	let l = 0;
 	for (const a of arrays) {
 		l += a.length;
@@ -152,7 +152,7 @@ export function* pngReader(data: Readonly<Uint8Array>) {
  * @param tags PNG tags and data.
  * @returns PNG data.
  */
-export function pngEncode(tags: Readonly<[number, Readonly<Uint8Array>][]>) {
+export function pngEncode(tags: readonly [number, Readonly<Uint8Array>][]) {
 	let total = PNG_MAGIC_SIZE;
 	for (const [, data] of tags) {
 		total += 12 + data.length;

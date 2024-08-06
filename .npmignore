@@ -30,7 +30,8 @@ yarn.lock
 /.eslintrc.yaml
 /.prettierrc.yaml
 /.prettierignore
-/babel.config.js
+/babel.config.mjs
+/eslint.config.mjs
 /tsconfig.json
 /tsconfig.eslint.json
 /spec

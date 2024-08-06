@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
+'use strict';
+
 const {readFile, writeFile} = require('node:fs/promises');
 
 const {VERSION, IconIcns, IconIco} = require('..');
 
 function basename(file) {
-	return file.split(/[\\/]/g).pop();
+	return file.split(/[/\\]/g).pop();
 }
 
 function help(script) {
@@ -121,9 +123,9 @@ function argparse(args) {
 		if (a.startsWith('-')) {
 			const e = a.indexOf('=');
 			if (e > 0) {
-				const p = a.substring(0, e);
+				const p = a.slice(0, e);
 				if (p in switches && typeof switches[p] !== 'boolean') {
-					switches[p] = a.substring(e + 1);
+					switches[p] = a.slice(e + 1);
 					continue;
 				}
 			} else if (a in switches) {

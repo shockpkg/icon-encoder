@@ -8,7 +8,6 @@ import {genPngFiles, specIconFilePng} from './util.spec';
 void describe('util', () => {
 	void describe('pngIhdr', () => {
 		for (const {name, size} of genPngFiles()) {
-			// eslint-disable-next-line no-loop-func
 			void it(`${name}: ${size}`, async () => {
 				const info = pngIhdr(
 					new Uint8Array(await readFile(specIconFilePng(name, size)))
